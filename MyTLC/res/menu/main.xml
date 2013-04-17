@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/login"
+        android:title="Login"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_action_done"
+        android:showAsAction="ifRoom"></item>
+    <item 
+        android:id="@+id/settings" 
+        android:title="Settings" 
+        android:orderInCategory="2"></item>
+    <item
+        android:id="@+id/deleteCreds"
+        android:title="Delete Credentials"
+        android:orderInCategory="3"></item>
+</menu>

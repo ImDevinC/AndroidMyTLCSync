@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DefaultText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="SettingsText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ResultText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+    <style name="OptionsText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#4E78A0</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+    <!-- ActionBar Sherlock Theme for BBY Theme -->
+    <style name="Theme.Sherlock.BlueWhite" parent="Theme.Sherlock.Light.ForceOverflow">
+        <item name="android:actionBarStyle">@style/Widget.Sherlock.BlueWhite.Actionbar</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.BlueWhite.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.BlueWhite.ActionButton.Overflow</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.BlueWhite.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.Sherlock.BlueWhite.Actionbar" parent="Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="android:background">#223d62</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.Sherlock.BlueWhite.ActionBar.Title</item>
+        <item name="background">#223d62</item>
+        <item name="actionMenuTextColor">#FFFFFF</item>
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.BlueWhite.ActionBar.Title</item>
+    </style>
+    <style name="Widget.Sherlock.BlueWhite.ActionButton.Overflow" parent="Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="TextAppearance.Sherlock.BlueWhite.ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of ActionBar Sherlock Theme for BBYTheme -->
+    <!-- BBY Theme -->
+    <style name="Theme.BlueWhite" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/Widget.BlueWhite.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.BlueWhite.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.BlueWhite.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="Widget.BlueWhite.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#223d62</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.BlueWhite.ActionBar.Title</item>
+    </style>
+    <style name="TextAppearance.BlueWhite.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of BBY Theme -->
+    <!-- GS Theme -->
+    <style name="Theme.OrangeBlack" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/Widget.OrangeBlack.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.OrangeBlack.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.OrangeBlack.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="Widget.OrangeBlack.Actionbar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">#E37222</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.OrangeBlack.ActionBar.Title</item>
+    </style>
+    <style name="TextAppearance.OrangeBlack.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of GS Theme -->
+    <!-- ActionBar Sherlock theme for GS Theme -->
+    <style name="Theme.Sherlock.OrangeBlack" parent="Theme.Sherlock.ForceOverflow">
+        <item name="android:actionBarStyle">@style/Widget.Sherlock.OrangeBlack.Actionbar</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.OrangeBlack.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.OrangeBlack.ActionButton.Overflow</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.OrangeBlack.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.Sherlock.OrangeBlack.Actionbar" parent="Widget.Sherlock.ActionBar.Solid">
+        <item name="android:background">#E37222</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.Sherlock.OrangeBlack.ActionBar.Title</item>
+        <item name="background">#E37222</item>
+        <item name="actionMenuTextColor">#FFFFFF</item>
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.OrangeBlack.ActionBar.Title</item>
+    </style>
+    <style name="Widget.Sherlock.OrangeBlack.ActionButton.Overflow" parent="Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="TextAppearance.Sherlock.OrangeBlack.ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of ActionBar Sherlock theme for GS Theme -->
+    <!-- ActionBar Sherlock Theme for Magnolia Theme -->
+    <style name="Theme.Sherlock.RedWhite" parent="Theme.Sherlock.Light.ForceOverflow">
+        <item name="android:actionBarStyle">@style/Widget.Sherlock.RedWhite.Actionbar</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.RedWhite.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.RedWhite.ActionButton.Overflow</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.RedWhite.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.Sherlock.RedWhite.Actionbar" parent="Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="android:background">#B50900</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.Sherlock.RedWhite.ActionBar.Title</item>
+        <item name="background">#B50900</item>
+        <item name="actionMenuTextColor">#FFFFFF</item>
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.RedWhite.ActionBar.Title</item>
+    </style>
+    <style name="Widget.Sherlock.RedWhite.ActionButton.Overflow" parent="Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="TextAppearance.Sherlock.RedWhite.ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of ActionBar Sherlock Theme for Magnolia Theme -->
+    <!-- Magnolia Theme -->
+    <style name="Theme.RedWhite" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/Widget.RedWhite.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.RedWhite.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.RedWhite.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="Widget.RedWhite.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#B50900</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.RedWhite.ActionBar.Title</item>
+    </style>
+    <style name="TextAppearance.RedWhite.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of Magnolia Theme -->
+</resources>
