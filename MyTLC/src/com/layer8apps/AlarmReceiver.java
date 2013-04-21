@@ -120,15 +120,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationManager notMan = (NotificationManager) cContext.getSystemService(Context.NOTIFICATION_SERVICE);
         // Create the notification with our icon and the message we received
         Notification not = new Notification(R.drawable.icon, msg, System.currentTimeMillis());
+        PendingIntent contentIntent = null;
         if (msg.startsWith("ERROR")) {
             msg = msg.replace("ERROR", "");
             Intent intent = new Intent(cContext, MyTlc.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(cContext, 8416, intent, 0);
-            not.setLatestEventInfo(cContext, "MyTLC", msg, contentIntent);
+            contentIntent = PendingIntent.getActivity(cContext, 8416, intent, 0);
         } else {
-            // Assign our information to the notification
-            not.setLatestEventInfo(cContext, "MyTLC", msg, null);
+            contentIntent = PendingIntent.getActivity(cContext, 8416, new Intent(), 0);
         }
+        not.setLatestEventInfo(cContext, "MyTLC Sync", msg, contentIntent);
         // Show the notification
         notMan.notify(0, not);
     }
