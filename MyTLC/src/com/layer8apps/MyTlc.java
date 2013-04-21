@@ -32,6 +32,7 @@ import android.os.*;
 import android.provider.CalendarContract;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.view.ViewConfiguration;
 import android.widget.*;
 
@@ -125,7 +126,7 @@ public class MyTlc extends SherlockFragmentActivity {
         checkSavedSettings();
 
         // Show the ads
-        showAds();
+        //showAds();
     }
 
     /************
@@ -134,7 +135,7 @@ public class MyTlc extends SherlockFragmentActivity {
      *  RETURNS: void
      *  AUTHOR: Devin Collins <agent14709@gmail.com>
      ************/
-    private void showAds() {
+    /*private void showAds() {
         // Get reference to our adView
         AdView adView = (AdView) findViewById(R.id.ad);
         // Create a new request for ads
@@ -145,7 +146,7 @@ public class MyTlc extends SherlockFragmentActivity {
 
         // Load the ad
         adView.loadAd(ar);
-    }
+    }*/
 
     /************
      *  PURPOSE: Handles when the user changes states (ie: rotates)
@@ -308,7 +309,7 @@ public class MyTlc extends SherlockFragmentActivity {
         // Check the saved settings
         checkSavedSettings();
         // Make sure we have a username and password set
-        if (!username.isEmpty() && !password.isEmpty()) {
+        if ((!TextUtils.isEmpty(username)) && (!TextUtils.isEmpty(password))) {
             // If the user has a stored calendar...
             if (calID != -1) {
                 // Start getting the information
