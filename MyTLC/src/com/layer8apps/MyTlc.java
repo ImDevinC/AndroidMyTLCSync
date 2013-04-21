@@ -317,8 +317,12 @@ public class MyTlc extends SherlockFragmentActivity {
             } else {
                 // Load all the calendars
                 String calendars[][] = selectCalendar();
-                // Create a dialog to ask the user about which calendar
-                createCalendarDialog(calendars);
+                if (calendars != null) {
+                    // Create a dialog to ask the user about which calendar
+                    createCalendarDialog(calendars);
+                } else {
+                    Toast.makeText(this, "There was an error loading your calendars, please verify calendars are setup properly", Toast.LENGTH_LONG).show();
+                }
             }
         } else {
             // Notify the user they need to put in information

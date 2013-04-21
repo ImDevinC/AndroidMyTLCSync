@@ -20,6 +20,7 @@
 
 package com.layer8apps;
 
+import java.io.Console;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -33,6 +34,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -116,7 +118,6 @@ public class Settings extends SherlockActivity {
         * Here we define what happens when we change the dropdown identifying
         * when we want to autosync our events
         *****************/
-
         spinSync.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -373,12 +374,14 @@ public class Settings extends SherlockActivity {
         }
         int count = 1;
         // Load each saved calendar and add it to the spinner
-        for (String id : calIds) {
-            if (id.equals(String.valueOf(tempID))) {
-                spinCal.setSelection(count);
-                return true;
-            } else {
-                count ++;
+        if (calIds!= null) {
+            for (String id : calIds) {
+                if (id.equals(String.valueOf(tempID))) {
+                    spinCal.setSelection(count);
+                    return true;
+                } else {
+                    count ++;
+                }
             }
         }
         return true;
@@ -421,6 +424,7 @@ public class Settings extends SherlockActivity {
      *  AUTHOR: Devin Collins <agent14709@gmail.com>, Bobby Ore <bob1987@gmail.com>, Casey Stark <starkca90@gmail.com>
      ************/
     private void createCalendarList() {
+        ArrayList<String> calendars = new ArrayList<String>();
         try {
             Cursor managedCursor = null;
             int nameColumn = 0;
@@ -459,8 +463,6 @@ public class Settings extends SherlockActivity {
                 }
             }
 
-            ArrayList<String> calendars = new ArrayList<String>();
-
             /************
              * Go to the first listing in our calendar
              *****************/
@@ -496,14 +498,16 @@ public class Settings extends SherlockActivity {
                 spinCal.setEnabled(false);
                 calendars.add("No calendars found on device");
             }
+        } catch (Exception e) {
+            spinCal.setEnabled(false);
+            calendars.add("No calendars found on device");
+        } finally {
             // Create a new adapter of strings
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, calendars);
             // Make the spinner a drop down item
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             // Assign the adapter to the spinner
             spinCal.setAdapter(adapter);
-        } catch (Exception e) {
-            // TODO: Error reporting?
         }
     }
 
