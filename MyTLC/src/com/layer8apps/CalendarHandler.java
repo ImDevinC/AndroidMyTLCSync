@@ -125,7 +125,7 @@ public class CalendarHandler extends IntentService {
                 if (postResults.contains("etmMenu.jsp")) {
                     // Here is the actual call for the schedule
                     updateStatus("Retrieving schedule...");
-                    String schedule = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
+                    String schedule = conn.getData("pN");
                     // If we successfully got the information, then parse out the schedule to read it properly
                     if (schedule != null) {
                         updateStatus("Parsing schedule...");
@@ -354,7 +354,7 @@ public class CalendarHandler extends IntentService {
                  * If the shift ends in the PM, add 12 hours
                  * to the time
                  *************/
-                if (work[1].substring(17, 19).equalsIgnoreCase("PM")) {
+                if (work[1].substring(17, 19).equalsIgnoreCase("PM") && workEHour != 12) {
                     workEHour += 12;
                 }
                 int workEMinute = Integer.parseInt(work[1].substring(14, 16));
