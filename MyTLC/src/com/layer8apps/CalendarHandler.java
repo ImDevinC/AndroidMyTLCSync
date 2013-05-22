@@ -125,7 +125,7 @@ public class CalendarHandler extends IntentService {
                 if (postResults.contains("etmMenu.jsp")) {
                     // Here is the actual call for the schedule
                     updateStatus("Retrieving schedule...");
-                    String schedule = conn.getData("pN");
+                    String schedule = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
                     // If we successfully got the information, then parse out the schedule to read it properly
                     if (schedule != null) {
                         updateStatus("Parsing schedule...");
