@@ -141,4 +141,82 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
     <!-- End of Magnolia Theme -->
+    <!-- ActionBar Sherlock Theme for Best Buy Mobile Theme -->
+    <style name="Theme.Sherlock.LightBlueWhite" parent="Theme.Sherlock.Light.ForceOverflow">
+        <item name="android:actionBarStyle">@style/Widget.Sherlock.LightBlueWhite.Actionbar</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.LightBlueWhite.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.LightBlueWhite.ActionButton.Overflow</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.LightBlueWhite.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.Sherlock.LightBlueWhite.Actionbar" parent="Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="android:background">#2FABE1</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.Sherlock.LightBlueWhite.ActionBar.Title</item>
+        <item name="background">#2FABE1</item>
+        <item name="actionMenuTextColor">#FFFFFF</item>
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.LightBlueWhite.ActionBar.Title</item>
+    </style>
+    <style name="Widget.Sherlock.LightBlueWhite.ActionButton.Overflow" parent="Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="TextAppearance.Sherlock.LightBlueWhite.ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of ActionBar Sherlock Theme for Best Buy Mobile Theme -->
+    <!-- Best Buy Mobile Theme -->
+    <style name="Theme.LightBlueWhite" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/Widget.LightBlueWhite.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.LightBlueWhite.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.LightBlueWhite.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow</item>
+    </style>
+    <style name="Widget.LightBlueWhite.Actionbar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#2FABE1</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.LightBlueWhite.ActionBar.Title</item>
+    </style>
+    <style name="TextAppearance.LightBlueWhite.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+    <!-- End of Best Buy Mobile Theme -->
+    <!-- AP Theme -->
+    <style name="Theme.YellowBlack" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarStyle">@style/Widget.YellowBlack.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.YellowBlack.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.YellowBlack.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow_black</item>
+    </style>
+    <style name="Widget.YellowBlack.Actionbar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">#FFF200</item>
+        <item name="android:actionMenuTextColor">#000000</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.YellowBlack.ActionBar.Title</item>
+    </style>
+    <style name="TextAppearance.YellowBlack.ActionBar.Title" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textColor">#000000</item>
+    </style>
+    <!-- End of AP Theme -->
+    <!-- ActionBar Sherlock theme for AP Theme -->
+    <style name="Theme.Sherlock.YellowBlack" parent="Theme.Sherlock.ForceOverflow">
+        <item name="android:actionBarStyle">@style/Widget.Sherlock.YellowBlack.Actionbar</item>
+        <item name="actionBarStyle">@style/Widget.Sherlock.YellowBlack.Actionbar</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.YellowBlack.ActionButton.Overflow</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.Sherlock.YellowBlack.ActionButton.Overflow</item>
+    </style>
+    <style name="Widget.Sherlock.YellowBlack.Actionbar" parent="Widget.Sherlock.ActionBar.Solid">
+        <item name="android:background">#FFF200</item>
+        <item name="android:actionMenuTextColor">#000000</item>
+        <item name="android:titleTextStyle">@style/TextAppearance.Sherlock.YellowBlack.ActionBar.Title</item>
+        <item name="background">#FFF200</item>
+        <item name="actionMenuTextColor">#000000</item>
+        <item name="titleTextStyle">@style/TextAppearance.Sherlock.YellowBlack.ActionBar.Title</item>
+    </style>
+    <style name="Widget.Sherlock.YellowBlack.ActionButton.Overflow" parent="Widget.Sherlock.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_action_overflow_black</item>
+    </style>
+    <style name="TextAppearance.Sherlock.YellowBlack.ActionBar.Title" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">#000000</item>
+    </style>
+    <!-- End of ActionBar Sherlock theme for AP Theme -->
 </resources>

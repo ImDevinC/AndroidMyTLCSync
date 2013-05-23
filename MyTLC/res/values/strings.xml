@@ -26,7 +26,6 @@
     <string name="weekly_button">Pick time</string>
 
     <string-array name="alarms">
-        <item>Default</item>
         <item>None</item>
         <item>5 Minutes Before</item>
         <item>15 Minutes Before</item>
@@ -56,5 +55,7 @@
         <item>Blue/White</item>
         <item>Orange/Black</item>
         <item>Red/White</item>
+        <item>Light Blue/White</item>
+        <!--<item>Yellow/Black</item>-->
     </string-array>
 </resources>

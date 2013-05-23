@@ -425,46 +425,41 @@ public class CalendarHandler extends IntentService {
                     switch (notification) {
                         case 0:
                         {
-                            notification = -1;
+                            notification = 0;
                             break;
                         }
                         case 1:
                         {
-                            notification = 0;
+                            notification = 5;
                             break;
                         }
                         case 2:
                         {
-                            notification = 5;
+                            notification = 15;
                             break;
                         }
                         case 3:
                         {
-                            notification = 15;
+                            notification = 30;
                             break;
                         }
                         case 4:
                         {
-                            notification = 30;
+                            notification = 60;
                             break;
                         }
                         case 5:
                         {
-                            notification = 60;
-                            break;
-                        }
-                        case 6:
-                        {
                             notification = 120;
                             break;
                         }
-                        case 7:
+                        case 6:
                         {
                             notification = 180;
                             break;
                         }
                     }
-                    if (notification != -1) {
+                    if (notification != 0) {
                         ContentValues reminders = new ContentValues();
                         reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
                         reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
