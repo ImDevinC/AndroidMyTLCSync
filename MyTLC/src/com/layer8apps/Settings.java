@@ -49,7 +49,7 @@ import com.actionbarsherlock.view.MenuItem;
  *************/
 public class Settings extends SherlockActivity {
 
-    private Spinner spinCal, spinSync, spinWeekly, spinTheme;
+    private Spinner spinCal, spinSync, spinWeekly, spinTheme, spinNotifications;
     private Button btnSync;
     private TextView txtSync;
     int hour = 0;
@@ -82,6 +82,7 @@ public class Settings extends SherlockActivity {
         spinSync = (Spinner) findViewById(R.id.spinSync);
         spinWeekly = (Spinner) findViewById(R.id.spinWeekly);
         spinTheme = (Spinner) findViewById(R.id.spinTheme);
+        spinNotifications = (Spinner) findViewById(R.id.spinNotifications);
 
         // Make sure we have support for older devices
         ActionBar actionBar = getSupportActionBar();
@@ -107,6 +108,10 @@ public class Settings extends SherlockActivity {
         adapter = ArrayAdapter.createFromResource(this, R.array.themes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinTheme.setAdapter(adapter);
+
+        adapter = ArrayAdapter.createFromResource(this, R.array.alarms, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinNotifications.setAdapter(adapter);
 
         // Load the calendar list
         createCalendarList();
@@ -362,6 +367,9 @@ public class Settings extends SherlockActivity {
             minute = Integer.parseInt(time.substring(time.indexOf(":") + 1));
             showSyncTime();
         }
+        // Get our alarm settings
+        int notification = pf.getNotification();
+        spinNotifications.setSelection(notification);
         // Get the saved theme if possible
         try {
             int theme = pf.getTheme();
@@ -530,6 +538,7 @@ public class Settings extends SherlockActivity {
                 pf.deleteTimeSpinner();
                 pf.deleteWeekSpinner();
                 pf.deleteSyncTime();
+                pf.deleteNotification();
             } else {
                 // Save our calendar ID
                 pf.setCalendarID(spinCal.getSelectedItemPosition());
@@ -552,6 +561,8 @@ public class Settings extends SherlockActivity {
                     pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
                     setAlarm(2, hour, minute, spinWeekly.getSelectedItemPosition());
                 }
+                pf.setNotification(spinNotifications.getSelectedItemPosition());
+
             }
             // Set the theme based on what the user has selected
             pf.setTheme(spinTheme.getSelectedItemPosition());

@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyTLC Sync</string>
-    <string name="user">Username </string>
-    <string name="pass" >Password </string>
-    <string name="chkbx"> Remember Me</string>
-    <string name="file">user_data</string>
-    <string name="settings_name">Settings</string>
-    <string name="saveSettings">Save Settings</string>
     <string name="add_events_to_calendar_">Add events to calendar&#8230;</string>
-    <string name="choose_check_settings">Set Sync Rate&#8230;</string>
-    <string name="settings">Settings</string>
+    <!--<string name="admob_id">a15106b6bcc2c94</string>-->
+    <string name="alarm_default">Use Default Settings</string>
+    <string name="alarm_disable">No alarm</string>
+    <string name="alarm_settings">Choose alarm settings&#8230;</string>
+    <string name="app_name">MyTLC Sync</string>
+    <string name="check_at">Check at:</string>
     <string name="check_calendar">Check Calendar</string>
+    <string name="chkbx"> Remember Me</string>
+    <string name="choose_check_settings">Set Sync Rate&#8230;</string>
+    <string name="clear_account">Clear Account</string>
+    <string name="current_sync_time">Check schedule at</string>
+    <string name="file">user_data</string>
     <string name="login">Login</string>
+    <string name="no_sync_time">No time set for schedule</string>
+    <string name="pass" >Password </string>
+    <string name="saveSettings">Save Settings</string>
+    <string name="settings">Settings</string>
+    <string name="settings_name">Settings</string>
     <string name="sync_daily">Check schedule every day @</string>
     <string name="sync_weekly">Check schedule every week on</string>
-    <string name="weekly_button">Pick time</string>
-    <string name="check_at">Check at:</string>
-    <string name="alarm_settings">Choose alarm settings&#8230;</string>
-    <string name="clear_account">Clear Account</string>
-    <string name="alarm_title">Set alarm for </string>
-    <string name="no_sync_time">No time set for schedule</string>
-    <string name="current_sync_time">Check schedule at</string>
     <string name="theme">Set theme</string>
-    <string name="admob_id">a15106b6bcc2c94</string>
-    <string-array name="sync">
+    <string name="user">Username </string>
+    <string name="weekly_button">Pick time</string>
+
+    <string-array name="alarms">
+        <item>Default</item>
         <item>None</item>
-        <item>Daily</item>
-        <item>Weekly</item>
+        <item>5 Minutes Before</item>
+        <item>15 Minutes Before</item>
+        <item>30 Minutes Before</item>
+        <item>1 Hour before</item>
+        <item>2 Hours Before</item>
+        <item>3 Hours Before</item>
     </string-array>
+
     <string-array name="daysOfWeek">
         <item>Sunday</item>
         <item>Monday</item>
@@ -37,11 +45,13 @@
         <item>Friday</item>
         <item>Saturday</item>
     </string-array>
-    <string-array name="alarms">
-        <item>Default</item>
+
+    <string-array name="sync">
         <item>None</item>
-        <item>Custom</item>
+        <item>Daily</item>
+        <item>Weekly</item>
     </string-array>
+
     <string-array name="themes">
         <item>Blue/White</item>
         <item>Orange/Black</item>

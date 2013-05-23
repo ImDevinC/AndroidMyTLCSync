@@ -336,5 +336,35 @@ public class Preferences {
         return getInt("theme");
     }
 
+    /************
+     *  PURPOSE: Set the notification time
+     *  ARGUMENTS: int theme
+     *  RETURNS: boolean
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public boolean setNotification(int not) {
+        saveInt("notification", not);
+        int verify = getInt("notification");
+        return (verify == not);
+    }
 
+    /************
+     *  PURPOSE: Get the stored notification settings
+     *  ARGUMENTS: null
+     *  RETURNS: int
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public int getNotification() {
+        return getInt("notification");
+    }
+
+    /************
+     *  PURPOSE: Delete the notification setting
+     *  ARGUMENTS: null
+     *  RETURNS: void
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public void deleteNotification() {
+        deleteTag("notification");
+    }
 }

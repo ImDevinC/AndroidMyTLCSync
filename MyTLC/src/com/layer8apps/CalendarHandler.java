@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
-import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -105,7 +104,7 @@ public class CalendarHandler extends IntentService {
         calID = intent.getIntExtra("calendarID", -1);
 
         // Create variables to be used through the application
-        List<String[]> workDays;
+        List<String[]> workDays = null;
         ConnectionManager conn = ConnectionManager.newConnection();
 
 
@@ -116,64 +115,82 @@ public class CalendarHandler extends IntentService {
         String tempToken = conn.getData("https://mytlc.bestbuy.com");
         if (tempToken != null) {
             loginToken = parseToken(tempToken);
-            if (loginToken != null) {
-                // This creates our login information
-                List<NameValuePair> parameters = createParams();
-                // Here we send the information to the server and login
-                String postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
-                // If we logged in properly, then we download the schedule
-                if (postResults.contains("etmMenu.jsp")) {
-                    // Here is the actual call for the schedule
-                    updateStatus("Retrieving schedule...");
-                    String schedule = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
-                    // If we successfully got the information, then parse out the schedule to read it properly
-                    if (schedule != null) {
-                        updateStatus("Parsing schedule...");
-                        workDays = parseSchedule(schedule);
-                        String secToken = parseSecureToken(schedule);
-                        if (secToken != null) {
-                            parameters = createSecondParams(secToken);
-                            schedule = conn.postData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp", parameters);
-                            if (schedule != null) {
-                                List<String[]> secondMonth = parseSchedule(schedule);
-                                if (secondMonth != null) {
-                                    workDays.addAll(secondMonth);
-                                    finalDays = workDays;
-                                    updateStatus("Adding shifts to calendar...");
-                                    // Add our shifts to the calendar
-                                    if (addDays()) {
-                                        // Report back that we're successful!
-                                        Message msg = Message.obtain();
-                                        Bundle b = new Bundle();
-                                        b.putString("status", "DONE");
-                                        b.putInt("count", workDays.size());
-                                        msg.setData(b);
-                                        try {
-                                            messenger.send(msg);
-                                        } catch (Exception e) {
-                                            // Nothing
-                                        }
-                                    }
-                                } else {
-                                    showError("There was an error retrieving your schedule, please try again");
-                                }
-                            } else {
-                                showError("Could not obtain user schedule, make sure you have a valid network connection");
-                            }
-                        } else {
-                            showError("Error retrieving your login token, make sure you have a valid network connection");
-                        }
-                    } else {
-                        showError("Could not obtain user schedule, make sure you have a valid network connection");
-                    }
-                } else {
-                    showError("Error logging in, please verify your username and password");
-                }
-            } else {
-                showError("Error retrieving your login token, make sure you have a valid network connection");
-            }
         } else {
             showError("Error retrieving your login token, make sure you have a valid network connection");
+            return;
+        }
+        String postResults = null;
+        // This creates our login information
+        List<NameValuePair> parameters = createParams();
+        if (loginToken != null) {
+            // Here we send the information to the server and login
+            postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
+        } else {
+            showError("Error retrieving your login token, make sure you have a valid network connection");
+            return;
+        }
+        // If we logged in properly, then we download the schedule
+        if (postResults != null && postResults.contains("etmMenu.jsp")) {
+            // Here is the actual call for the schedule
+            updateStatus("Retrieving schedule...");
+            postResults = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
+        } else {
+            showError("Error logging in, please verify your username and password");
+            return;
+        }
+        // If we successfully got the information, then parse out the schedule to read it properly
+        String secToken = null;
+        if (postResults != null) {
+            updateStatus("Parsing schedule...");
+            workDays = parseSchedule(postResults);
+            secToken = parseSecureToken(postResults);
+        } else {
+            showError("Could not obtain user schedule, make sure you have a valid network connection");
+            return;
+        }
+        if (secToken != null) {
+            parameters = createSecondParams(secToken);
+            postResults = conn.postData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp", parameters);
+        } else {
+            showError("Error retrieving your login token, make sure you have a valid network connection");
+            return;
+        }
+        List<String[]> secondMonth = null;
+        if (postResults != null) {
+            secondMonth = parseSchedule(postResults);
+        } else {
+            showError("Could not obtain user schedule, make sure you have a valid network connection");
+            return;
+        }
+        if (secondMonth != null) {
+            if (workDays == null) {
+                workDays = secondMonth;
+            } else {
+                workDays.addAll(secondMonth);
+            }
+            finalDays = workDays;
+
+        } else {
+            showError("There was an error retrieving your schedule, please try again");
+            return;
+        }
+        // Add our shifts to the calendar
+        updateStatus("Adding shifts to calendar...");
+        if (finalDays != null && addDays()) {
+            // Report back that we're successful!
+            Message msg = Message.obtain();
+            Bundle b = new Bundle();
+            b.putString("status", "DONE");
+            b.putInt("count", workDays.size());
+            msg.setData(b);
+            try {
+                messenger.send(msg);
+            } catch (Exception e) {
+                // Nothing
+            }
+        } else {
+            showError("Couldn't add your shifts to your calendar, please try again");
+            return;
         }
     }
 
@@ -296,7 +313,11 @@ public class CalendarHandler extends IntentService {
                         String shifts[] = schedules[x].split("<br>");
                         for (int i = 0; i < shifts.length - 1; i++) {
                             if (shifts[i].contains("AM") && !shifts[i].contains("<td>") || shifts[i].contains("PM") && !shifts[i].contains("<td>")) {
-                                workingDays.add(new String[]{date, shifts[i]});
+                                String dept = "";
+                                if (i != shifts.length - 1) {
+                                    dept = (shifts[i+1].startsWith("L-")) ? shifts[i + 1] : "";
+                                }
+                                workingDays.add(new String[]{date, shifts[i], dept});
                             }
                         }
 
@@ -381,18 +402,74 @@ public class CalendarHandler extends IntentService {
                     cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
                     cv.put(CalendarContract.Events.CALENDAR_ID, calID);
                     cv.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
-                    cr.insert(CalendarContract.Events.CONTENT_URI, cv);
+                    cv.put(CalendarContract.Events.EVENT_LOCATION, work[2]);
                 } else {
                     cv.put("calendar_id", calID);
                     cv.put("title", "Work@BestBuy");
+                    cv.put("eventLocation", work[2]);
                     cv.put("dtstart", beginTime.getTimeInMillis());
                     cv.put("dtend", endTime.getTimeInMillis());
                     cv.put("allDay", 0);
                     cv.put("transparency", 1);
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-                        cr.insert(Uri.parse("content://calendar/events/"), cv);
-                    } else {
-                        cr.insert(Uri.parse("content://com.android.calendar/events/"), cv);
+                }
+                Uri uri;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+                    uri = cr.insert(Uri.parse("content://calendar/events/"), cv);
+                } else {
+                    uri = cr.insert(Uri.parse("content://com.android.calendar/events/"), cv);
+                }
+                if (uri != null) {
+                    long eventID = Long.parseLong(uri.getLastPathSegment());
+                    Preferences pf = new Preferences(this);
+                    int notification = pf.getNotification();
+                    switch (notification) {
+                        case 0:
+                        {
+                            notification = -1;
+                            break;
+                        }
+                        case 1:
+                        {
+                            notification = 0;
+                            break;
+                        }
+                        case 2:
+                        {
+                            notification = 5;
+                            break;
+                        }
+                        case 3:
+                        {
+                            notification = 15;
+                            break;
+                        }
+                        case 4:
+                        {
+                            notification = 30;
+                            break;
+                        }
+                        case 5:
+                        {
+                            notification = 60;
+                            break;
+                        }
+                        case 6:
+                        {
+                            notification = 120;
+                            break;
+                        }
+                        case 7:
+                        {
+                            notification = 180;
+                            break;
+                        }
+                    }
+                    if (notification != -1) {
+                        ContentValues reminders = new ContentValues();
+                        reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
+                        reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+                        reminders.put(CalendarContract.Reminders.MINUTES, notification);
+                        cr.insert(CalendarContract.Reminders.CONTENT_URI, reminders);
                     }
                 }
             }
@@ -413,7 +490,6 @@ public class CalendarHandler extends IntentService {
         Calendar c = Calendar.getInstance();
         ContentResolver cr = this.getContentResolver();
         c.set(Calendar.HOUR, 0);
-        Log.e("ERRORLOG", "c: " + c.getTimeInMillis());
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
             cr.delete(Uri.parse("content://calendar/events/"), "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
