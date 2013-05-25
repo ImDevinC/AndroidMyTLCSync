@@ -682,12 +682,12 @@ public class Settings extends SherlockActivity {
             } else {
                 setTheme(R.style.Theme_LightBlueWhite);
             }
-        } else if (theme == 4) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                setTheme(R.style.Theme_Sherlock_YellowBlack);
-            } else {
-                setTheme(R.style.Theme_YellowBlack);
-            }
+//        } else if (theme == 4) {
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+//                setTheme(R.style.Theme_Sherlock_YellowBlack);
+//            } else {
+//                setTheme(R.style.Theme_YellowBlack);
+//            }
         } else {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 setTheme(R.style.Theme_Sherlock_BlueWhite);

@@ -394,34 +394,40 @@ public class CalendarHandler extends IntentService {
                 TimeZone timeZone = TimeZone.getDefault();
 
                 /************
-                 * The below if statement would provide calendar validation
+                 * Here we create our calendar event based on the version code
                  *************/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    cv.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
-                    cv.put(CalendarContract.Events.DTEND, endTime.getTimeInMillis());
-                    cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
                     cv.put(CalendarContract.Events.CALENDAR_ID, calID);
-                    cv.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
+                    cv.put(CalendarContract.Events.DTEND, endTime.getTimeInMillis());
+                    cv.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
                     cv.put(CalendarContract.Events.EVENT_LOCATION, work[2]);
+                    cv.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
+                    cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
                 } else {
-                    cv.put("calendar_id", calID);
-                    cv.put("title", "Work@BestBuy");
-                    cv.put("eventLocation", work[2]);
-                    cv.put("dtstart", beginTime.getTimeInMillis());
-                    cv.put("dtend", endTime.getTimeInMillis());
                     cv.put("allDay", 0);
+                    cv.put("calendar_id", calID);
+                    cv.put("dtend", endTime.getTimeInMillis());
+                    cv.put("dtstart", beginTime.getTimeInMillis());
+                    cv.put("eventLocation", work[2]);
+                    cv.put("title", "Work@BestBuy");
                     cv.put("transparency", 1);
                 }
-                Uri uri;
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-                    uri = cr.insert(Uri.parse("content://calendar/events/"), cv);
-                } else {
-                    uri = cr.insert(Uri.parse("content://com.android.calendar/events/"), cv);
-                }
+
+                /************
+                 * Add our events to the calendar based on the Uri we get
+                 *************/
+                Uri uri = cr.insert(getEventsUri(), cv);
+
+                /************
+                 * If we retrieved a Uri for the event, try to add the reminder
+                 *************/
                 if (uri != null) {
+                    // Get the ID of the calendar event
                     long eventID = Long.parseLong(uri.getLastPathSegment());
                     Preferences pf = new Preferences(this);
+                    // Get our stored notification time
                     int notification = pf.getNotification();
+                    // Convert the stored time into minutes
                     switch (notification) {
                         case 0:
                         {
@@ -459,12 +465,23 @@ public class CalendarHandler extends IntentService {
                             break;
                         }
                     }
+
+                    /************
+                     * Build our reminder based on version code
+                     *************/
                     if (notification != 0) {
                         ContentValues reminders = new ContentValues();
-                        reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
-                        reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-                        reminders.put(CalendarContract.Reminders.MINUTES, notification);
-                        cr.insert(CalendarContract.Reminders.CONTENT_URI, reminders);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                            reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
+                            reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+                            reminders.put(CalendarContract.Reminders.MINUTES, notification);
+                        } else {
+                            reminders.put("event_id", eventID);
+                            reminders.put("method", 1);
+                            reminders.put("minutes", notification);
+                        }
+                        // Add the reminder to the system
+                        cr.insert(getRemindersUri(), reminders);
                     }
                 }
             }
@@ -485,12 +502,38 @@ public class CalendarHandler extends IntentService {
         Calendar c = Calendar.getInstance();
         ContentResolver cr = this.getContentResolver();
         c.set(Calendar.HOUR, 0);
+        cr.delete(getEventsUri(), "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
+    }
+
+    /************
+     *  PURPOSE: Gets the Uri for events based on Android version number
+     *  ARGUMENTS: NULL
+     *  RETURNS: Uri
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     *************/
+    private Uri getEventsUri() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            cr.delete(Uri.parse("content://calendar/events/"), "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
+            return Uri.parse("content://calendar/events/");
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            cr.delete(Uri.parse("content://com.android.calendar/events/"), "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
+            return Uri.parse("content://com.android.calendar/events/");
         } else {
-            cr.delete(CalendarContract.Events.CONTENT_URI, "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
+            return CalendarContract.Events.CONTENT_URI;
+        }
+    }
+
+    /************
+     *  PURPOSE: Gets the Uri for reminders based on Android version number
+     *  ARGUMENTS: NULL
+     *  RETURNS: Uri
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     *************/
+    private Uri getRemindersUri() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+            return Uri.parse("content://calendar/reminders/");
+        } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            return Uri.parse("content://com.android.calendar/reminders/");
+        } else {
+            return CalendarContract.Reminders.CONTENT_URI;
         }
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BBY_bg">#223d62</color>
+    <color name="BBY_text">#FFFFFF</color>
+    <color name="GeekSquad_bg">#E37222</color>
+    <color name="GeekSquad_text">#FFFFFF</color>
+    <color name="Magnolia_bg">#B50900</color>
+    <color name="Magnolia_text">#FFFFFF</color>
+    <color name="Mobile_bg">#2FABE1</color>
+    <color name="Mobile_text">#FFFFFF</color>
+</resources>

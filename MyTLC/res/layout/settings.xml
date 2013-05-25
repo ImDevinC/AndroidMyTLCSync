@@ -11,7 +11,7 @@
         android:orientation="vertical">
         <TextView
             style="@style/SettingsText"
-            android:text="@string/add_events_to_calendar_" />
+            android:text="@string/default_calendar" />
         <Spinner
             android:id="@+id/spinCals"
             android:spinnerMode="dropdown"

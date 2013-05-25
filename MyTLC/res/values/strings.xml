@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="add_events_to_calendar_">Add events to calendar&#8230;</string>
     <!--<string name="admob_id">a15106b6bcc2c94</string>-->
     <string name="alarm_default">Use Default Settings</string>
     <string name="alarm_disable">No alarm</string>
@@ -9,9 +8,10 @@
     <string name="check_at">Check at:</string>
     <string name="check_calendar">Check Calendar</string>
     <string name="chkbx"> Remember Me</string>
-    <string name="choose_check_settings">Set Sync Rate&#8230;</string>
+    <string name="choose_check_settings">Sync on these days</string>
     <string name="clear_account">Clear Account</string>
     <string name="current_sync_time">Check schedule at</string>
+    <string name="default_calendar">Default Calendar&#8230;</string>
     <string name="file">user_data</string>
     <string name="login">Login</string>
     <string name="no_sync_time">No time set for schedule</string>
