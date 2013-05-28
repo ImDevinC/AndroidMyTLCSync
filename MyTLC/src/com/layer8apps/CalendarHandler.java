@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
+import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -404,13 +405,12 @@ public class CalendarHandler extends IntentService {
                     cv.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
                     cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
                 } else {
-                    cv.put("allDay", 0);
                     cv.put("calendar_id", calID);
                     cv.put("dtend", endTime.getTimeInMillis());
                     cv.put("dtstart", beginTime.getTimeInMillis());
                     cv.put("eventLocation", work[2]);
                     cv.put("title", "Work@BestBuy");
-                    cv.put("transparency", 1);
+                    cv.put("hasAlarm", 1);
                 }
 
                 /************
@@ -529,9 +529,9 @@ public class CalendarHandler extends IntentService {
      *************/
     private Uri getRemindersUri() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            return Uri.parse("content://calendar/reminders/");
+            return Uri.parse("content://calendar/reminders");
         } else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            return Uri.parse("content://com.android.calendar/reminders/");
+            return Uri.parse("content://com.android.calendar/reminders");
         } else {
             return CalendarContract.Reminders.CONTENT_URI;
         }
