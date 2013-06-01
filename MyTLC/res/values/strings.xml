@@ -35,6 +35,13 @@
         <item>3 Hours Before</item>
     </string-array>
 
+    <string-array name="changes">
+        <item>&#x2022; Minor bugfixes</item>
+        <item>&#x2022; New theme</item>
+        <item>&#x2022; Due to changes in the calendar settings, please verify
+            that the correct calendar is in your settings</item>
+    </string-array>
+
     <string-array name="daysOfWeek">
         <item>Sunday</item>
         <item>Monday</item>

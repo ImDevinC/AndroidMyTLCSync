@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
-import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 

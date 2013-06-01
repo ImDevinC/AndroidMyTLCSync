@@ -77,6 +77,19 @@ public class Preferences {
     }
 
     /************
+     *  PURPOSE: Saves a long variable to the preferences
+     *  ARGUMENTS: String identifier, long value
+     *  RETURNS: void
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    private void saveFloat(String identifier, float value) {
+        if (activity != null) {
+            editor.putFloat(identifier, value);
+            editor.commit();
+        }
+    }
+
+    /************
      *  PURPOSE: Gets a string from preferences
      *  ARGUMENTS: String identifier
      *  RETURNS: String
@@ -99,6 +112,20 @@ public class Preferences {
     private int getInt(String identifier) {
         if (activity != null) {
             return settings.getInt(identifier, -1);
+        } else {
+            return -1;
+        }
+    }
+
+    /************
+     *  PURPOSE: Gets a long value from preferences
+     *  ARGUMENTS: String identifier
+     *  RETURNS: long
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    private float getFloat(String identifier) {
+        if (activity != null) {
+            return settings.getFloat(identifier, -1);
         } else {
             return -1;
         }
@@ -338,7 +365,7 @@ public class Preferences {
 
     /************
      *  PURPOSE: Set the notification time
-     *  ARGUMENTS: int theme
+     *  ARGUMENTS: int not
      *  RETURNS: boolean
      *  AUTHOR: Devin Collins <agent14709@gmail.com>
      ************/
@@ -366,5 +393,37 @@ public class Preferences {
      ************/
     public void deleteNotification() {
         deleteTag("notification");
+    }
+
+    /************
+     *  PURPOSE: Set the version
+     *  ARGUMENTS: long version
+     *  RETURNS: boolean
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public boolean setVersion(float version) {
+        saveFloat("version", version);
+        float verify = getFloat("version");
+        return (verify == version);
+    }
+
+    /************
+     *  PURPOSE: Get the stored version settings
+     *  ARGUMENTS: null
+     *  RETURNS: long
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public float getVersion() {
+        return getFloat("version");
+    }
+
+    /************
+     *  PURPOSE: Delete the version setting
+     *  ARGUMENTS: null
+     *  RETURNS: void
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public void deleteVersion() {
+        deleteTag("version");
     }
 }

@@ -33,6 +33,7 @@ import android.provider.CalendarContract;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewConfiguration;
 import android.widget.*;
 
@@ -55,7 +56,6 @@ public class MyTlc extends SherlockFragmentActivity {
 	private String password;
     private boolean logonSaved;
     private int calID = -1;
-
 
 	private CheckBox remember;
 	private EditText txtUsername;
@@ -96,12 +96,22 @@ public class MyTlc extends SherlockFragmentActivity {
 
         // Create a new preferences manager
         pf = new Preferences(this);
-
         // Set the theme of the app
         applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        try {
+            String version = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
+            if (Float.parseFloat(version) > pf.getVersion()) {
+                showChangeLog();
+                pf.setVersion(Float.parseFloat(version));
+            }
+        } catch (Exception ex) {
+
+        }
+
 
         txtUsername = (EditText) findViewById(R.id.txtUsername);
         txtUsername.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -129,6 +139,13 @@ public class MyTlc extends SherlockFragmentActivity {
         //showAds();
     }
 
+    private void showChangeLog() {
+        DialogFragment fragment;
+        // Create a new instance of the fragmentDialog
+        fragment = ChangelogDialog.newInstance();
+        // Show the dialog with the "progress" tag for later reference
+        fragment.show(getSupportFragmentManager(), "changeLog");
+    }
     /************
      *  PURPOSE: Shows the ad banner at the bottom of the main page
      *  ARGUMENTS: null
@@ -282,8 +299,18 @@ public class MyTlc extends SherlockFragmentActivity {
         // Check the box if the information is saved
         remember.setChecked(logonSaved);
         // Get the stored calendar ID
-        calID = pf.getCalendarID();
-
+        int tempID = pf.getCalendarID();
+        calID = -1;
+        // Get the list of calendars
+        String calendars[][] = selectCalendar();
+        if (calendars != null) {
+            for (int x = 0; x < calendars.length; x++) {
+                // Check to make sure that the calendar ID is a valid one
+                if (Integer.parseInt(calendars[x][0]) == tempID) {
+                    calID = tempID;
+                }
+            }
+        }
     }
 
     /************
@@ -528,6 +555,36 @@ public class MyTlc extends SherlockFragmentActivity {
             } else {
                 setTheme(R.style.Theme_BlueWhite);
             }
+        }
+    }
+
+    public static class ChangelogDialog extends SherlockDialogFragment {
+
+        public ChangelogDialog() {}
+
+        static ChangelogDialog newInstance() {
+            ChangelogDialog d = new ChangelogDialog();
+            return d;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Recent Changes");
+            builder.setCancelable(true);
+            String[] changes = getResources().getStringArray(R.array.changes);
+            String result = "";
+            for (String change : changes) {
+                result += change + "\n";
+            }
+            builder.setMessage(result);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+            AlertDialog alert = builder.create();
+            return alert;
         }
     }
 

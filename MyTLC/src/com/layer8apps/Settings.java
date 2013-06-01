@@ -540,22 +540,23 @@ public class Settings extends SherlockActivity {
                 pf.deleteSyncTime();
                 pf.deleteNotification();
             } else {
-                // Save our calendar ID
-                pf.setCalendarID(spinCal.getSelectedItemPosition());
                 if (spinSync.getSelectedItemPosition() == 0) {
                     // If the user doesn't want to sync, erase all information
+                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
                     pf.deleteTimeSpinner();
                     pf.deleteWeekSpinner();
                     pf.deleteSyncTime();
                     cancelAlarm();
                 } else if (spinSync.getSelectedItemPosition() == 1) {
                     // If the user wants to sync daily, save that information
+                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
                     pf.deleteWeekSpinner();
                     pf.setTimeSpinner(1);
                     pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
                     setAlarm(1, hour, minute, 0);
                 } else {
                     // If the user wants to sync weekly, save that
+                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
                     pf.setTimeSpinner(2);
                     pf.setWeekSpinner(spinWeekly.getSelectedItemPosition());
                     pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
