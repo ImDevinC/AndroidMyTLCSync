@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
+import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -109,6 +110,16 @@ public class CalendarHandler extends IntentService {
 
 
         /************
+         * Log user interaction
+         *************/
+        updateStatus("Verifying connection...");
+        List<NameValuePair> parameters = createAPIinfo();
+        String apiResult = conn.postData("http://www.imdevinc.com/mytlc/connects", parameters);
+        if (apiResult == null) {
+            showError("Unable to establish connection, please make sure your data is enabled");
+        }
+
+        /************
          * Once we verify that we have a valid token, we get the actual schedule
          *************/
         updateStatus("Logging in...");
@@ -121,7 +132,7 @@ public class CalendarHandler extends IntentService {
         }
         String postResults = null;
         // This creates our login information
-        List<NameValuePair> parameters = createParams();
+        parameters = createParams();
         if (loginToken != null) {
             // Here we send the information to the server and login
             postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
@@ -224,6 +235,17 @@ public class CalendarHandler extends IntentService {
         try {
             tempToken = token.substring(token.indexOf("secureToken") + 20, token.indexOf("'/>"));
             return tempToken;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private List<NameValuePair> createAPIinfo() {
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        try {
+            params.add(new BasicNameValuePair("user_id", username));
+            params.add(new BasicNameValuePair("device_type", "Android"));
+            return params;
         } catch (Exception e) {
             return null;
         }
