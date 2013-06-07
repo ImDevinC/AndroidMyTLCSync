@@ -243,7 +243,7 @@ public class CalendarHandler extends IntentService {
     private List<NameValuePair> createAPIinfo() {
         List<NameValuePair> params = new LinkedList<NameValuePair>();
         try {
-            params.add(new BasicNameValuePair("user_id", username));
+//            params.add(new BasicNameValuePair("user_id", username));
             params.add(new BasicNameValuePair("device_type", "Android"));
             return params;
         } catch (Exception e) {
