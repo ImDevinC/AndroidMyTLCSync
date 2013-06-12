@@ -361,6 +361,47 @@ public class CalendarHandler extends IntentService {
     private boolean addDays() {
         try {
             deleteOldEvents();
+            Preferences pf = new Preferences(this);
+            // Get our stored notification time
+            int notification = pf.getNotification();
+            // Convert the stored time into minutes
+            switch (notification) {
+                case 0:
+                {
+                    notification = 0;
+                    break;
+                }
+                case 1:
+                {
+                    notification = 5;
+                    break;
+                }
+                case 2:
+                {
+                    notification = 15;
+                    break;
+                }
+                case 3:
+                {
+                    notification = 30;
+                    break;
+                }
+                case 4:
+                {
+                    notification = 60;
+                    break;
+                }
+                case 5:
+                {
+                    notification = 120;
+                    break;
+                }
+                case 6:
+                {
+                    notification = 180;
+                    break;
+                }
+            }
             for (String[] work : finalDays) {
                 Calendar beginTime = Calendar.getInstance();
                 /************
@@ -424,6 +465,7 @@ public class CalendarHandler extends IntentService {
                     cv.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
                     cv.put(CalendarContract.Events.EVENT_LOCATION, work[2]);
                     cv.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
+                    cv.put(CalendarContract.Events.HAS_ALARM, (notification == 0) ? 0 : 1);
                     cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
                 } else {
                     cv.put("calendar_id", calID);
@@ -431,7 +473,7 @@ public class CalendarHandler extends IntentService {
                     cv.put("dtstart", beginTime.getTimeInMillis());
                     cv.put("eventLocation", work[2]);
                     cv.put("title", "Work@BestBuy");
-                    cv.put("hasAlarm", 1);
+                    cv.put("hasAlarm", (notification == 0) ? 0 : 1);
                 }
 
                 /************
@@ -445,47 +487,6 @@ public class CalendarHandler extends IntentService {
                 if (uri != null) {
                     // Get the ID of the calendar event
                     long eventID = Long.parseLong(uri.getLastPathSegment());
-                    Preferences pf = new Preferences(this);
-                    // Get our stored notification time
-                    int notification = pf.getNotification();
-                    // Convert the stored time into minutes
-                    switch (notification) {
-                        case 0:
-                        {
-                            notification = 0;
-                            break;
-                        }
-                        case 1:
-                        {
-                            notification = 5;
-                            break;
-                        }
-                        case 2:
-                        {
-                            notification = 15;
-                            break;
-                        }
-                        case 3:
-                        {
-                            notification = 30;
-                            break;
-                        }
-                        case 4:
-                        {
-                            notification = 60;
-                            break;
-                        }
-                        case 5:
-                        {
-                            notification = 120;
-                            break;
-                        }
-                        case 6:
-                        {
-                            notification = 180;
-                            break;
-                        }
-                    }
 
                     /************
                      * Build our reminder based on version code
