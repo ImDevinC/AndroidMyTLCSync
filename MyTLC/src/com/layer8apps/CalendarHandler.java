@@ -110,16 +110,6 @@ public class CalendarHandler extends IntentService {
 
 
         /************
-         * Log user interaction
-         *************/
-        updateStatus("Verifying connection...");
-        List<NameValuePair> parameters = createAPIinfo();
-        String apiResult = conn.postData("http://www.imdevinc.com/mytlc/connects", parameters);
-        if (apiResult == null) {
-            showError("Unable to establish connection, please make sure your data is enabled");
-        }
-
-        /************
          * Once we verify that we have a valid token, we get the actual schedule
          *************/
         updateStatus("Logging in...");
@@ -132,7 +122,7 @@ public class CalendarHandler extends IntentService {
         }
         String postResults = null;
         // This creates our login information
-        parameters = createParams();
+        List<NameValuePair> parameters = createParams();
         if (loginToken != null) {
             // Here we send the information to the server and login
             postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
