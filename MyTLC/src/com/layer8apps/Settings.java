@@ -369,6 +369,7 @@ public class Settings extends SherlockActivity {
         }
         // Get our alarm settings
         int notification = pf.getNotification();
+        Log.e("ERRORLOG", String.valueOf(notification));
         spinNotifications.setSelection(notification);
         // Get the saved theme if possible
         try {
@@ -538,7 +539,6 @@ public class Settings extends SherlockActivity {
                 pf.deleteTimeSpinner();
                 pf.deleteWeekSpinner();
                 pf.deleteSyncTime();
-                pf.deleteNotification();
             } else {
                 if (spinSync.getSelectedItemPosition() == 0) {
                     // If the user doesn't want to sync, erase all information
@@ -562,9 +562,8 @@ public class Settings extends SherlockActivity {
                     pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
                     setAlarm(2, hour, minute, spinWeekly.getSelectedItemPosition());
                 }
-                pf.setNotification(spinNotifications.getSelectedItemPosition());
-
             }
+            pf.setNotification(spinNotifications.getSelectedItemPosition());
             // Set the theme based on what the user has selected
             pf.setTheme(spinTheme.getSelectedItemPosition());
             // If the theme has changed...

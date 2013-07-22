@@ -518,7 +518,7 @@ public class CalendarHandler extends IntentService {
                     cv.put("dtstart", beginTime.getTimeInMillis());
                     cv.put("eventLocation", work[2]);
                     cv.put("title", "Work@BestBuy");
-                    cv.put("hasAlarm", (notification == 0) ? 0 : 1);
+                    cv.put("hasAlarm", (notification <= 0) ? 0 : 1);
                 }
 
                 /************
@@ -526,10 +526,11 @@ public class CalendarHandler extends IntentService {
                  *************/
                 Uri uri = cr.insert(getEventsUri(), cv);
 
+                Log.e("ERRORLOG", String.valueOf((notification <= 0) ? 0 : 1));
                 /************
                  * If we retrieved a Uri for the event, try to add the reminder
                  *************/
-                if (uri != null && notification != 0) {
+                if (uri != null && notification > 0) {
                     // Get the ID of the calendar event
                     long eventID = Long.parseLong(uri.getLastPathSegment());
 
