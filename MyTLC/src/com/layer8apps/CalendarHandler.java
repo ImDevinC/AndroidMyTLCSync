@@ -489,7 +489,7 @@ public class CalendarHandler extends IntentService {
                 }
                 int workEMinute = Integer.parseInt(work[1].substring(14, 16));
                 Calendar endTime = Calendar.getInstance();
-                if (workEHour < workSHour) {
+                if (workEHour < workSHour && workEHour != 0) {
                     workDay += 1;
                 }
                 endTime.set(workYear, workMonth, workDay, workEHour, workEMinute);
