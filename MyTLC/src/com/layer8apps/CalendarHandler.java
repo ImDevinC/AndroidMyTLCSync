@@ -526,7 +526,6 @@ public class CalendarHandler extends IntentService {
                  *************/
                 Uri uri = cr.insert(getEventsUri(), cv);
 
-                Log.e("ERRORLOG", String.valueOf((notification <= 0) ? 0 : 1));
                 /************
                  * If we retrieved a Uri for the event, try to add the reminder
                  *************/
