@@ -238,7 +238,6 @@ public class CalendarHandler extends IntentService {
     private String parseError(String data) {
         String result = null;
         try {
-            Log.e("ERRORLOG", data);
             if (!data.contains("<b>System Error</b>") && !data.contains("Message:")) {
                 return result;
             }
@@ -530,7 +529,7 @@ public class CalendarHandler extends IntentService {
                 /************
                  * If we retrieved a Uri for the event, try to add the reminder
                  *************/
-                if (uri != null) {
+                if (uri != null && notification != 0) {
                     // Get the ID of the calendar event
                     long eventID = Long.parseLong(uri.getLastPathSegment());
 
