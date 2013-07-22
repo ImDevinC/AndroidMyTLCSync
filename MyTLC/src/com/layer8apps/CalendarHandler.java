@@ -117,7 +117,12 @@ public class CalendarHandler extends IntentService {
         if (tempToken != null) {
             loginToken = parseToken(tempToken);
         } else {
-            showError("Error retrieving your login token, make sure you have a valid network connection");
+            String error = parseError(tempToken);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("Error retrieving your login token, make sure you have a valid network connection");
+            }
             return;
         }
         String postResults = null;
@@ -127,7 +132,12 @@ public class CalendarHandler extends IntentService {
             // Here we send the information to the server and login
             postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
         } else {
-            showError("Error retrieving your login token, make sure you have a valid network connection");
+            String error = parseError(postResults);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("Error retrieving your login token, make sure you have a valid network connection");
+            }
             return;
         }
         // If we logged in properly, then we download the schedule
@@ -136,7 +146,12 @@ public class CalendarHandler extends IntentService {
             updateStatus("Retrieving schedule...");
             postResults = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
         } else {
-            showError("Error logging in, please verify your username and password");
+            String error = parseError(postResults);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("Error logging in, please verify your username and password");
+            }
             return;
         }
         // If we successfully got the information, then parse out the schedule to read it properly
@@ -146,21 +161,36 @@ public class CalendarHandler extends IntentService {
             workDays = parseSchedule(postResults);
             secToken = parseSecureToken(postResults);
         } else {
-            showError("Could not obtain user schedule, make sure you have a valid network connection");
+            String error = parseError(postResults);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("Could not obtain user schedule, make sure you have a valid network connection");
+            }
             return;
         }
         if (secToken != null) {
             parameters = createSecondParams(secToken);
             postResults = conn.postData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp", parameters);
         } else {
-            showError("Error retrieving your login token, make sure you have a valid network connection");
+            String error = parseError(postResults);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("Error retrieving your login token, make sure you have a valid network connection");
+            }
             return;
         }
         List<String[]> secondMonth = null;
         if (postResults != null) {
             secondMonth = parseSchedule(postResults);
         } else {
-            showError("Could not obtain user schedule, make sure you have a valid network connection");
+            String error = parseError(postResults);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("Could not obtain user schedule, make sure you have a valid network connection");
+            }
             return;
         }
         if (secondMonth != null) {
@@ -170,9 +200,13 @@ public class CalendarHandler extends IntentService {
                 workDays.addAll(secondMonth);
             }
             finalDays = workDays;
-
         } else {
-            showError("There was an error retrieving your schedule, please try again");
+            String error = parseError(postResults);
+            if (error != null) {
+                showError(error);
+            } else {
+                showError("There was an error retrieving your schedule, please try again");
+            }
             return;
         }
         // Add our shifts to the calendar
@@ -193,6 +227,28 @@ public class CalendarHandler extends IntentService {
             showError("Couldn't add your shifts to your calendar, please try again");
             return;
         }
+    }
+
+    /************
+     *   PURPOSE: Attempts to parse out the error message from MyTLC
+     *   ARGUMENTS: String data
+     *   RETURNS: String
+     *   AUTHOR: Devin Collins <agent14709@gmail.com>
+     *************/
+    private String parseError(String data) {
+        String result = null;
+        try {
+            Log.e("ERRORLOG", data);
+            if (!data.contains("<b>System Error</b>") && !data.contains("Message:")) {
+                return result;
+            }
+            result = data.substring(data.indexOf("Message:") + 8);
+            result = result.substring(0, result.indexOf("<br>"));
+            result = "MyTLC Error: " + result.trim();
+        } catch (Exception e) {
+            return null;
+        }
+        return result;
     }
 
     /************
