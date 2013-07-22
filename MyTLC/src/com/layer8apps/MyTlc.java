@@ -98,7 +98,6 @@ public class MyTlc extends SherlockFragmentActivity {
         pf = new Preferences(this);
         // Set the theme of the app
         applyTheme();
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 

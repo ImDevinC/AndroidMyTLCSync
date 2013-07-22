@@ -36,10 +36,10 @@
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; Minor bugfixes</item>
-        <item>&#x2022; New theme</item>
-        <item>&#x2022; Due to changes in the calendar settings, please verify
-            that the correct calendar is in your settings</item>
+        <item>&#x2022; Resolved issue with alarm notifications being set even when told not to</item>
+        <item>&#x2022; Fixed issue with shifts ending at midnight spanning two days</item>
+        <item>&#x2022; Errors from MyTLC website are displayed if they are present</item>
+        <item>&#x2022; App now restarts automatically on reboot or upgrade of app</item>
     </string-array>
 
     <string-array name="daysOfWeek">

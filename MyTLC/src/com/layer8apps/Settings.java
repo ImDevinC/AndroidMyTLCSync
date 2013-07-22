@@ -369,7 +369,6 @@ public class Settings extends SherlockActivity {
         }
         // Get our alarm settings
         int notification = pf.getNotification();
-        Log.e("ERRORLOG", String.valueOf(notification));
         spinNotifications.setSelection(notification);
         // Get the saved theme if possible
         try {
