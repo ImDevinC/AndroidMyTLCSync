@@ -472,10 +472,14 @@ public class CalendarHandler extends IntentService {
                  * If the shift starts in the PM, add 12 hours
                  * to the time
                  *************/
+
                 int workSHour = Integer.parseInt(work[1].substring(0, 2));
                 if (work[1].substring(6, 8).equalsIgnoreCase("PM") && workSHour != 12) {
                     workSHour += 12;
+                } else if (work[1].substring(6, 8).equalsIgnoreCase("AM") && workSHour == 12) {
+                    workSHour = 0;
                 }
+
                 int workSMinute = Integer.parseInt(work[1].substring(3, 5));
                 beginTime.set(workYear, workMonth, workDay, workSHour, workSMinute);
                 int workEHour = Integer.parseInt(work[1].substring(11, 13));
@@ -485,10 +489,14 @@ public class CalendarHandler extends IntentService {
                  *************/
                 if (work[1].substring(17, 19).equalsIgnoreCase("PM") && workEHour != 12) {
                     workEHour += 12;
+                } else if (work[1].substring(17, 19).equalsIgnoreCase("AM") && workEHour == 12) {
+                    workEHour = 0;
                 }
+
                 int workEMinute = Integer.parseInt(work[1].substring(14, 16));
                 Calendar endTime = Calendar.getInstance();
-                if (workEHour < workSHour && workEHour != 0) {
+
+                if (workEHour < workSHour) {
                     workDay += 1;
                 }
                 endTime.set(workYear, workMonth, workDay, workEHour, workEMinute);
