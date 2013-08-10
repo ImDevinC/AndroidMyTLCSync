@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--<string name="admob_id">a15106b6bcc2c94</string>-->
+    <string name="bbyopenApi">yuptvvgha79f4xw4nvntbcpv</string>
+    <string name="address">Address</string>
     <string name="alarm_default">Use Default Settings</string>
     <string name="alarm_disable">No alarm</string>
     <string name="alarm_settings">Choose alarm settings&#8230;</string>
@@ -10,18 +12,22 @@
     <string name="chkbx"> Remember Me</string>
     <string name="choose_check_settings">Sync on these days</string>
     <string name="clear_account">Clear Account</string>
+    <string name="current_location">Use Current Location</string>
     <string name="current_sync_time">Check schedule at</string>
     <string name="default_calendar">Default Calendar&#8230;</string>
     <string name="file">user_data</string>
+    <string name="get_address">Get Address</string>
     <string name="login">Login</string>
     <string name="no_sync_time">No time set for schedule</string>
     <string name="pass" >Password </string>
     <string name="saveSettings">Save Settings</string>
     <string name="settings">Settings</string>
     <string name="settings_name">Settings</string>
+    <string name="store_number">Store Number</string>
     <string name="sync_daily">Check schedule every day @</string>
     <string name="sync_weekly">Check schedule every week on</string>
     <string name="theme">Set theme</string>
+    <string name="timezone_settings">MyTLC Timezone</string>
     <string name="user">Username </string>
     <string name="weekly_button">Pick time</string>
 
@@ -36,7 +42,9 @@
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; Fixed an issue with overnight schedules not being set properly.</item>
+        <item>&#x2022; Added ability to add an address to shifts</item>
+        <item>&#x2022; Added ability to lookup store addresses</item>
+        <item>&#x2022; Added support for timezone adjustments</item>
     </string-array>
 
     <string-array name="daysOfWeek">
@@ -61,5 +69,14 @@
         <item>Red/White</item>
         <item>Light Blue/White</item>
         <!--<item>Yellow/Black</item>-->
+    </string-array>
+
+    <string-array name="timezones">
+        <item>Eastern Standard Time</item>
+        <item>Central Standard Time</item>
+        <item>Mountain Standard Time</item>
+        <item>Pacific Standard Time</item>
+        <item>Alaska Standard Time</item>
+        <item>Hawaii-Aleutian Standard Time</item>
     </string-array>
 </resources>

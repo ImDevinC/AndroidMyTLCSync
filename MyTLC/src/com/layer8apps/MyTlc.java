@@ -21,6 +21,7 @@
 package com.layer8apps;
 
 import java.lang.reflect.Field;
+import java.util.TimeZone;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -79,6 +80,7 @@ public class MyTlc extends SherlockFragmentActivity {
          * have a hard settings button.  This allows the options menu to always be
          * visible
          ************/
+
         try{
             // Get the configuration of the device
             ViewConfiguration config = ViewConfiguration.get(this);

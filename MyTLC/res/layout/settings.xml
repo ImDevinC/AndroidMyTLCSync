@@ -7,16 +7,15 @@
     android:padding="20dp">
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
             style="@style/SettingsText"
             android:text="@string/default_calendar" />
         <Spinner
             android:id="@+id/spinCals"
-            android:spinnerMode="dropdown"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
         <LinearLayout
             android:id="@+id/llSync"
             android:layout_width="fill_parent"
@@ -27,7 +26,6 @@
                 android:text="@string/choose_check_settings" />
             <Spinner
                 android:id="@+id/spinSync"
-                android:spinnerMode="dropdown"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" />
             <LinearLayout
@@ -64,15 +62,14 @@
                     android:orientation="vertical"
                     android:gravity="center">
                     <TextView
-                            android:id="@+id/txtWeeklySync"
-                            style="@style/SettingsText" />
+                        android:id="@+id/txtWeeklySync"
+                        style="@style/SettingsText" />
                     <Button
                         android:id="@+id/btnWeekly"
                         android:text="@string/weekly_button"
                         style="@style/SettingsText" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llAlarmSettings"
@@ -103,8 +100,55 @@
             <Spinner
                 android:id="@+id/spinTheme"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-            </Spinner>
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                style="@style/SettingsText"
+                android:text="@string/timezone_settings" />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Spinner
+                    android:id="@+id/spinTimezone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/txtStore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/store_number" />
+                <Button
+                    android:id="@+id/btnGetStore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_address"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <EditText
+                    android:id="@+id/txtAddress"
+                    android:hint="@string/address"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

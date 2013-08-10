@@ -20,7 +20,6 @@
 
 package com.layer8apps;
 
-import java.io.Console;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -34,7 +33,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -49,8 +47,9 @@ import com.actionbarsherlock.view.MenuItem;
  *************/
 public class Settings extends SherlockActivity {
 
-    private Spinner spinCal, spinSync, spinWeekly, spinTheme, spinNotifications;
-    private Button btnSync;
+    private Spinner spinCal, spinSync, spinWeekly, spinTheme, spinNotifications, spinTimezone;
+    private Button btnStore, btnSync;
+    private EditText txtStore, txtAddress;
     private TextView txtSync;
     int hour = 0;
     int minute = 0;
@@ -78,11 +77,17 @@ public class Settings extends SherlockActivity {
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
 
+        btnStore = (Button) findViewById(R.id.btnGetStore);
+
+        txtAddress = (EditText) findViewById(R.id.txtAddress);
+        txtStore = (EditText) findViewById(R.id.txtStore);
+
         spinCal = (Spinner) findViewById(R.id.spinCals);
         spinSync = (Spinner) findViewById(R.id.spinSync);
         spinWeekly = (Spinner) findViewById(R.id.spinWeekly);
         spinTheme = (Spinner) findViewById(R.id.spinTheme);
         spinNotifications = (Spinner) findViewById(R.id.spinNotifications);
+        spinTimezone = (Spinner) findViewById(R.id.spinTimezone);
 
         // Make sure we have support for older devices
         ActionBar actionBar = getSupportActionBar();
@@ -112,6 +117,10 @@ public class Settings extends SherlockActivity {
         adapter = ArrayAdapter.createFromResource(this, R.array.alarms, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinNotifications.setAdapter(adapter);
+
+        adapter = ArrayAdapter.createFromResource(this, R.array.timezones, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinTimezone.setAdapter(adapter);
 
         // Load the calendar list
         createCalendarList();
@@ -210,6 +219,18 @@ public class Settings extends SherlockActivity {
             }
         });
 
+        final Settings settings = this;
+        btnStore.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                String storeId = txtStore.getText().toString().trim();
+                if (!storeId.isEmpty()) {
+                    StoreHelper helper = new StoreHelper(getApplicationContext(), settings);
+                    helper.getStoreAddress(storeId);
+                }
+            }
+        });
     }
 
     /************
@@ -332,6 +353,24 @@ public class Settings extends SherlockActivity {
         }
     }
 
+    public void setLoadingText() {
+        btnStore.setEnabled(false);
+
+        txtAddress.setText("Loading store address...");
+
+        txtAddress.setEnabled(false);
+    }
+
+    public void setAddress(String address) {
+        txtStore.setText("");
+
+        btnStore.setEnabled(true);
+
+        txtAddress.setEnabled(true);
+
+        txtAddress.setText(address);
+    }
+
     /************
      *  PURPOSE: Checks for all of our previously saved settings
      *  ARGUMENTS: null
@@ -378,7 +417,6 @@ public class Settings extends SherlockActivity {
             }
             spinTheme.setSelection(theme);
         } catch (Exception e) {
-            // TODO: Error reporting?
         }
         int count = 1;
         // Load each saved calendar and add it to the spinner
@@ -392,6 +430,28 @@ public class Settings extends SherlockActivity {
                 }
             }
         }
+
+        // Find the saved timezone
+        String tz = pf.getTimezone();
+
+        if (tz == null) {
+            tz = TimeZone.getDefault().getDisplayName();
+        }
+
+        for (int i = 0; i < spinTimezone.getAdapter().getCount(); i++) {
+            String value = spinTimezone.getAdapter().getItem(i).toString();
+            if (value.equalsIgnoreCase(tz)) {
+                spinTimezone.setSelection(i);
+                break;
+            }
+        }
+
+        String address = pf.getAddress();
+
+        if (address != null) {
+            txtAddress.setText(address);
+        }
+
         return true;
     }
 
@@ -563,6 +623,16 @@ public class Settings extends SherlockActivity {
                 }
             }
             pf.setNotification(spinNotifications.getSelectedItemPosition());
+            pf.setTimezone(spinTimezone.getSelectedItem().toString());
+
+            String address = txtAddress.getText().toString();
+
+            if (address.equals("") || address.equals("Store not found") || address.equals("Address not found for store") ||
+                    address.equals("Error loading result")) {
+                pf.deleteAddress();
+            } else {
+                pf.setAddress(txtAddress.getText().toString().trim());
+            }
             // Set the theme based on what the user has selected
             pf.setTheme(spinTheme.getSelectedItemPosition());
             // If the theme has changed...

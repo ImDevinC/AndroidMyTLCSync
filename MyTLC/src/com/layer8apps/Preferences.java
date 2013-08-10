@@ -146,6 +146,40 @@ public class Preferences {
     }
 
     /************
+     *  PURPOSE: Get the stored address
+     *  ARGUMENTS: null
+     *  RETURNS: String
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public String getAddress() {
+        return getString("address");
+    }
+
+    /************
+     *  PURPOSE: Save the address
+     *  ARGUMENTS: String address
+     *  RETURNS: boolean
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public boolean setAddress(String address) {
+        saveString("address", address);
+
+        String verify = getString("address");
+
+        return (verify != null && verify.equals(address));
+    }
+
+    /************
+     *  PURPOSE: Delete the stored address
+     *  ARGUMENTS: null
+     *  RETURNS: void
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public void deleteAddress() {
+        deleteTag("address");
+    }
+
+    /************
      *  PURPOSE: Get the stored username
      *  ARGUMENTS: null
      *  RETURNS: void
@@ -425,5 +459,37 @@ public class Preferences {
      ************/
     public void deleteVersion() {
         deleteTag("version");
+    }
+
+    /************
+     *  PURPOSE: Set the timezone
+     *  ARGUMENTS: String timezone
+     *  RETURNS: boolean
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public boolean setTimezone(String timezone) {
+        saveString("timezone", timezone);
+        String verify = getString("timezone");
+        return (verify == timezone);
+    }
+
+    /************
+     *  PURPOSE: Get the stored timezone settings
+     *  ARGUMENTS: null
+     *  RETURNS: String
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public String getTimezone() {
+        return getString("timezone");
+    }
+
+    /************
+     *  PURPOSE: Delete the timezone setting
+     *  ARGUMENTS: null
+     *  RETURNS: void
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public void deleteTimezone() {
+        deleteTag("timezone");
     }
 }

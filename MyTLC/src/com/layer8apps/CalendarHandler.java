@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
-import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -447,6 +446,27 @@ public class CalendarHandler extends IntentService {
                     break;
                 }
             }
+
+            String tz = pf.getTimezone();
+            TimeZone zone = TimeZone.getDefault();
+            if (tz == null) {
+
+            } else if (tz.equalsIgnoreCase("Eastern Standard Time")) {
+                zone.setID("US/Eastern");
+            } else if (tz.equalsIgnoreCase("Central Standard Time")) {
+                zone.setID("US/Central");
+            } else if (tz.equalsIgnoreCase("Mountain Standard Time")) {
+                zone.setID("US/Mountain");
+            } else if (tz.equalsIgnoreCase("Pacific Standard Time")) {
+                zone.setID("US/Pacific");
+            } else if (tz.equalsIgnoreCase("Alaska Standard Time")) {
+                zone.setID("US/Alaska");
+            } else if (tz.equalsIgnoreCase("Hawaii-Aleutian Standard Time")) {
+                zone.setID("US/Hawaii");
+            }
+
+            String address = pf.getAddress();
+
             for (String[] work : finalDays) {
                 Calendar beginTime = Calendar.getInstance();
                 /************
@@ -507,24 +527,26 @@ public class CalendarHandler extends IntentService {
                  *************/
                 ContentResolver cr = this.getContentResolver();
                 ContentValues cv = new ContentValues();
-                TimeZone timeZone = TimeZone.getDefault();
 
                 /************
                  * Here we create our calendar event based on the version code
                  *************/
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     cv.put(CalendarContract.Events.CALENDAR_ID, calID);
+                    cv.put(CalendarContract.Events.DESCRIPTION, work[2]);
                     cv.put(CalendarContract.Events.DTEND, endTime.getTimeInMillis());
                     cv.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
-                    cv.put(CalendarContract.Events.EVENT_LOCATION, work[2]);
-                    cv.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
+                    cv.put(CalendarContract.Events.EVENT_LOCATION, (address == null) ? "" : address);
+                    cv.put(CalendarContract.Events.EVENT_TIMEZONE, zone.getID());
                     cv.put(CalendarContract.Events.HAS_ALARM, (notification == 0) ? 0 : 1);
                     cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
                 } else {
                     cv.put("calendar_id", calID);
+                    cv.put("description", work[2]);
                     cv.put("dtend", endTime.getTimeInMillis());
                     cv.put("dtstart", beginTime.getTimeInMillis());
-                    cv.put("eventLocation", work[2]);
+                    cv.put("eventLocation", (address == null) ? "" : address);
+                    cv.put("eventTimezone", zone.getID());
                     cv.put("title", "Work@BestBuy");
                     cv.put("hasAlarm", (notification <= 0) ? 0 : 1);
                 }
