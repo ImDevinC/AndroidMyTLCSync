@@ -447,25 +447,17 @@ public class CalendarHandler extends IntentService {
                 }
             }
 
-            String tz = pf.getTimezone();
-            TimeZone zone = TimeZone.getDefault();
-            if (tz == null) {
-
-            } else if (tz.equalsIgnoreCase("Eastern Standard Time")) {
-                zone.setID("US/Eastern");
-            } else if (tz.equalsIgnoreCase("Central Standard Time")) {
-                zone.setID("US/Central");
-            } else if (tz.equalsIgnoreCase("Mountain Standard Time")) {
-                zone.setID("US/Mountain");
-            } else if (tz.equalsIgnoreCase("Pacific Standard Time")) {
-                zone.setID("US/Pacific");
-            } else if (tz.equalsIgnoreCase("Alaska Standard Time")) {
-                zone.setID("US/Alaska");
-            } else if (tz.equalsIgnoreCase("Hawaii-Aleutian Standard Time")) {
-                zone.setID("US/Hawaii");
-            }
-
             String address = pf.getAddress();
+
+            TimeZone zone = TimeZone.getDefault();
+
+            String timeAdjust = pf.getTimezone();
+
+            int time = 0;
+
+            if (timeAdjust != null) {
+                time = Integer.parseInt(timeAdjust);
+            }
 
             for (String[] work : finalDays) {
                 Calendar beginTime = Calendar.getInstance();
@@ -502,6 +494,9 @@ public class CalendarHandler extends IntentService {
 
                 int workSMinute = Integer.parseInt(work[1].substring(3, 5));
                 beginTime.set(workYear, workMonth, workDay, workSHour, workSMinute);
+
+                beginTime.add(Calendar.HOUR, time);
+
                 int workEHour = Integer.parseInt(work[1].substring(11, 13));
                 /************
                  * If the shift ends in the PM, add 12 hours
@@ -521,6 +516,8 @@ public class CalendarHandler extends IntentService {
                 }
                 endTime.set(workYear, workMonth, workDay, workEHour, workEMinute);
 
+                endTime.add(Calendar.HOUR, time);
+
                 /************
                  * ContentResolver and ContentValues are what we use to add
                  * our calendar events to the device
@@ -531,6 +528,7 @@ public class CalendarHandler extends IntentService {
                 /************
                  * Here we create our calendar event based on the version code
                  *************/
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     cv.put(CalendarContract.Events.CALENDAR_ID, calID);
                     cv.put(CalendarContract.Events.DESCRIPTION, work[2]);

@@ -108,6 +108,7 @@ public class MyTlc extends SherlockFragmentActivity {
             if (Float.parseFloat(version) > pf.getVersion()) {
                 showChangeLog();
                 pf.setVersion(Float.parseFloat(version));
+                pf.deleteTimezone();
             }
         } catch (Exception ex) {
 

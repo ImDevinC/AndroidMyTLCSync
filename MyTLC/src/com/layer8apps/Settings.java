@@ -225,7 +225,7 @@ public class Settings extends SherlockActivity {
             @Override
             public void onClick(View view) {
                 String storeId = txtStore.getText().toString().trim();
-                if (!storeId.isEmpty()) {
+                if (storeId != null && !storeId.equals("")) {
                     StoreHelper helper = new StoreHelper(getApplicationContext(), settings);
                     helper.getStoreAddress(storeId);
                 }
@@ -378,6 +378,7 @@ public class Settings extends SherlockActivity {
      *  AUTHOR: Devin Collins <agent14709@gmail.com>, Bobby Ore <bob1987@gmail.com>, Casey Stark <starkca90@gmail.com>
      ************/
     private boolean checkSavedSettings() {
+
         // Get the calendar ID and the sync options
         int tempID = pf.getCalendarID();
         int sync = pf.getTimeSpinner();
@@ -424,7 +425,7 @@ public class Settings extends SherlockActivity {
             for (String id : calIds) {
                 if (id.equals(String.valueOf(tempID))) {
                     spinCal.setSelection(count);
-                    return true;
+                    break;
                 } else {
                     count ++;
                 }
@@ -438,12 +439,21 @@ public class Settings extends SherlockActivity {
             tz = TimeZone.getDefault().getDisplayName();
         }
 
+        boolean found = false;
+
         for (int i = 0; i < spinTimezone.getAdapter().getCount(); i++) {
+
             String value = spinTimezone.getAdapter().getItem(i).toString();
+
             if (value.equalsIgnoreCase(tz)) {
                 spinTimezone.setSelection(i);
+                found = true;
                 break;
             }
+        }
+
+        if (!found) {
+            spinTimezone.setSelection(5);
         }
 
         String address = pf.getAddress();
