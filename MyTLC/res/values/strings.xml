@@ -42,11 +42,7 @@
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; Added ability to add an address to shifts</item>
-        <item>&#x2022; Added ability to lookup store addresses</item>
-        <item>&#x2022; Added support for hourly adjustments to schedule</item>
-        <item>&#x2022; Fixed an issue with timezone changes</item>
-        <item>&#x2022; Fixed an issue with older versions of android</item>
+        <item>&#x2022; Added support for new MyTLC certificate</item>
     </string-array>
 
     <string-array name="daysOfWeek">

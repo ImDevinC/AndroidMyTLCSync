@@ -113,6 +113,7 @@ public class CalendarHandler extends IntentService {
          *************/
         updateStatus("Logging in...");
         String tempToken = conn.getData("https://mytlc.bestbuy.com");
+//        String tempToken = conn.getData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/login.jsp");
         if (tempToken != null) {
             loginToken = parseToken(tempToken);
         } else {
@@ -130,6 +131,7 @@ public class CalendarHandler extends IntentService {
         if (loginToken != null) {
             // Here we send the information to the server and login
             postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
+//              postResults = conn.postData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/login.jsp", parameters);
         } else {
             String error = parseError(postResults);
             if (error != null) {
@@ -144,6 +146,7 @@ public class CalendarHandler extends IntentService {
             // Here is the actual call for the schedule
             updateStatus("Retrieving schedule...");
             postResults = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
+//            postResults = conn.getData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/time/timesheet/etmTnsMonth.jsp");
         } else {
             String error = parseError(postResults);
             if (error != null) {
@@ -171,6 +174,7 @@ public class CalendarHandler extends IntentService {
         if (secToken != null) {
             parameters = createSecondParams(secToken);
             postResults = conn.postData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp", parameters);
+//            postResults = conn.postData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/time/timesheet/etmTnsMonth.jsp", parameters);
         } else {
             String error = parseError(postResults);
             if (error != null) {
