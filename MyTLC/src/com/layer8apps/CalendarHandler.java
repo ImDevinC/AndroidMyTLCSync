@@ -103,6 +103,8 @@ public class CalendarHandler extends IntentService {
         messenger = (Messenger) intent.getExtras().get("handler");
         calID = intent.getIntExtra("calendarID", -1);
 
+        String url = getApplicationContext().getResources().getString(R.string.url);
+
         // Create variables to be used through the application
         List<String[]> workDays = null;
         ConnectionManager conn = ConnectionManager.newConnection();
@@ -112,8 +114,7 @@ public class CalendarHandler extends IntentService {
          * Once we verify that we have a valid token, we get the actual schedule
          *************/
         updateStatus("Logging in...");
-        String tempToken = conn.getData("https://mytlc.bestbuy.com");
-//        String tempToken = conn.getData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/login.jsp");
+        String tempToken = conn.getData(url);
         if (tempToken != null) {
             loginToken = parseToken(tempToken);
         } else {
@@ -130,8 +131,7 @@ public class CalendarHandler extends IntentService {
         List<NameValuePair> parameters = createParams();
         if (loginToken != null) {
             // Here we send the information to the server and login
-            postResults = conn.postData("https://mytlc.bestbuy.com/etm/login.jsp", parameters);
-//              postResults = conn.postData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/login.jsp", parameters);
+            postResults = conn.postData(url + "/etm/login.jsp", parameters);
         } else {
             String error = parseError(postResults);
             if (error != null) {
@@ -145,8 +145,7 @@ public class CalendarHandler extends IntentService {
         if (postResults != null && postResults.contains("etmMenu.jsp")) {
             // Here is the actual call for the schedule
             updateStatus("Retrieving schedule...");
-            postResults = conn.getData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp");
-//            postResults = conn.getData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/time/timesheet/etmTnsMonth.jsp");
+            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
         } else {
             String error = parseError(postResults);
             if (error != null) {
@@ -173,8 +172,7 @@ public class CalendarHandler extends IntentService {
         }
         if (secToken != null) {
             parameters = createSecondParams(secToken);
-            postResults = conn.postData("https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp", parameters);
-//            postResults = conn.postData("http://ptl01tlcap003.na.bestbuy.com:9081/etm/time/timesheet/etmTnsMonth.jsp", parameters);
+            postResults = conn.postData(url + "/etm/time/timesheet/etmTnsMonth.jsp", parameters);
         } else {
             String error = parseError(postResults);
             if (error != null) {
@@ -280,12 +278,23 @@ public class CalendarHandler extends IntentService {
      *************/
     private String parseSecureToken(String token) {
         String tempToken;
-        try {
-            tempToken = token.substring(token.indexOf("secureToken") + 20, token.indexOf("'/>"));
-            return tempToken;
-        } catch (Exception e) {
-            return null;
+        if (token.contains("secureToken")) {
+            try {
+                tempToken = token.substring(token.indexOf("secureToken") + 20, token.indexOf("'/>"));
+                return tempToken;
+            } catch (Exception e) {
+                return null;
+            }
+        } else if (token.contains("id='wbat")) {
+            try {
+                token = token.substring(token.indexOf("name='wbat'"));
+                tempToken = token.substring(token.indexOf("id='wbat") + 17, token.indexOf("'>"));
+                return tempToken;
+            } catch (Exception e) {
+                return null;
+            }
         }
+        return null;
     }
 
     private List<NameValuePair> createAPIinfo() {
@@ -344,6 +353,7 @@ public class CalendarHandler extends IntentService {
             params.add(new BasicNameValuePair("pageAction", ""));
             params.add(new BasicNameValuePair("NEW_MONTH_YEAR", month + "/" + year));
             params.add(new BasicNameValuePair("secureToken", secToken));
+            params.add(new BasicNameValuePair("wbat", secToken));
             params.add(new BasicNameValuePair("selectedTocID", "11"));
             params.add(new BasicNameValuePair("parentID", "10"));
             params.add(new BasicNameValuePair("homePageButtonWasSelected", "false"));

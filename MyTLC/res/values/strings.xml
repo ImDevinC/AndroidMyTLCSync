@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="url">https://mytlc.bestbuy.com</string>
+
+    <!--<string name="url">http://ptl01tlcap003.na.bestbuy.com:9081</string>-->
     <!--<string name="admob_id">a15106b6bcc2c94</string>-->
+
     <string name="bbyopenApi">yuptvvgha79f4xw4nvntbcpv</string>
     <string name="address">Address</string>
     <string name="alarm_default">Use Default Settings</string>
