@@ -480,7 +480,7 @@ public class CalendarHandler extends IntentService {
                  * check to see if the scheduled day is next month or next year so
                  * we know to increase our variables properly
                  *************/
-                int workDay = Integer.parseInt(work[0]);
+                int workDay = Integer.parseInt(work[0].trim());
                 int workMonth = beginTime.get(Calendar.MONTH);
                 int workYear = beginTime.get(Calendar.YEAR);
                 /************
