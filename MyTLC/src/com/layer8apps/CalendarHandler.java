@@ -397,7 +397,9 @@ public class CalendarHandler extends IntentService {
                                 if (i != shifts.length - 1) {
                                     dept = (shifts[i+1].startsWith("L-")) ? shifts[i + 1] : "";
                                 }
-                                workingDays.add(new String[]{date, shifts[i], dept});
+                                if (!dept.startsWith("SICK-U")) {
+                                    workingDays.add(new String[]{date, shifts[i], dept});
+                                }
                             }
                         }
 
