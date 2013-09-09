@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
+import android.util.Log;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -45,6 +46,7 @@ public class CalendarHandler extends IntentService {
     private String password;
     private int calID = -1;
     private String loginToken = null;
+    private String wbat = null;
     private List<String[]> finalDays;
     private Messenger messenger;
 
@@ -114,7 +116,7 @@ public class CalendarHandler extends IntentService {
          * Once we verify that we have a valid token, we get the actual schedule
          *************/
         updateStatus("Logging in...");
-        String tempToken = conn.getData(url);
+        String tempToken = conn.getData(url + "/etm/login.jsp");
         if (tempToken != null) {
             loginToken = parseToken(tempToken);
         } else {
@@ -161,6 +163,7 @@ public class CalendarHandler extends IntentService {
             updateStatus("Parsing schedule...");
             workDays = parseSchedule(postResults);
             secToken = parseSecureToken(postResults);
+            wbat = parseWbat(postResults);
         } else {
             String error = parseError(postResults);
             if (error != null) {
@@ -297,6 +300,26 @@ public class CalendarHandler extends IntentService {
         return null;
     }
 
+    /************
+     *   PURPOSE: Parses out the a wbat token used for HTTPS browsing
+     *   ARGUMENTS: String token
+     *   RETURNS: String
+     *   AUTHOR: Devin Collins <agent14709@gmail.com>
+     *************/
+    private String parseWbat(String token) {
+        String tempToken;
+        if (token.contains("id='wbat")) {
+            try {
+                token = token.substring(token.indexOf("name='wbat'"));
+                tempToken = token.substring(token.indexOf("id='wbat") + 17, token.indexOf("'>"));
+                return tempToken;
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
     private List<NameValuePair> createAPIinfo() {
         List<NameValuePair> params = new LinkedList<NameValuePair>();
         try {
@@ -353,7 +376,7 @@ public class CalendarHandler extends IntentService {
             params.add(new BasicNameValuePair("pageAction", ""));
             params.add(new BasicNameValuePair("NEW_MONTH_YEAR", month + "/" + year));
             params.add(new BasicNameValuePair("secureToken", secToken));
-            params.add(new BasicNameValuePair("wbat", secToken));
+            params.add(new BasicNameValuePair("wbat", wbat));
             params.add(new BasicNameValuePair("selectedTocID", "11"));
             params.add(new BasicNameValuePair("parentID", "10"));
             params.add(new BasicNameValuePair("homePageButtonWasSelected", "false"));

@@ -21,7 +21,6 @@
 package com.layer8apps;
 
 import java.lang.reflect.Field;
-import java.util.TimeZone;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -34,7 +33,6 @@ import android.provider.CalendarContract;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewConfiguration;
 import android.widget.*;
 
@@ -42,8 +40,6 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
 
 /************
  *  PURPOSE: Primary UI thread that the user sees when

@@ -20,7 +20,6 @@
 
 package com.layer8apps;
 
-import android.util.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -67,6 +66,7 @@ public class ConnectionManager {
             HttpParams params = new BasicHttpParams();
             HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
             HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+            HttpProtocolParams.setUserAgent(params, "MyTLC-Sync");
 
             SchemeRegistry registry = new SchemeRegistry();
             registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
@@ -74,7 +74,7 @@ public class ConnectionManager {
 
             ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
-            // Create a new conncetion for our client
+            // Create a new connection for our client
             client = new DefaultHttpClient(ccm, params);
         } catch (Exception ex) {
             client = new DefaultHttpClient();
