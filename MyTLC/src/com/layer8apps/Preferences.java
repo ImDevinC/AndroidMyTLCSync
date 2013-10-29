@@ -24,6 +24,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
 /************
  *  PURPOSE: Stores all of our preferences and makes them easily retrievable
  *  AUTHOR: Devin Collins <agent14709@gmail.com>, Bobby Ore <bob1987@gmail.com>
@@ -34,6 +37,7 @@ public class Preferences {
     static SharedPreferences settings;
     static SharedPreferences.Editor editor;
     private Context activity;
+    private String preferencesFile = "MyTLCSyncPreferences";
 
     /************
      *  PURPOSE: Public preferences reference
@@ -470,7 +474,7 @@ public class Preferences {
     public boolean setTimezone(String timezone) {
         saveString("timezone", timezone);
         String verify = getString("timezone");
-        return (verify == timezone);
+        return (verify.equals(timezone));
     }
 
     /************
