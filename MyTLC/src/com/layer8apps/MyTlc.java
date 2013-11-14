@@ -27,12 +27,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.*;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.*;
 import android.provider.CalendarContract;
 import android.support.v4.app.DialogFragment;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ViewConfiguration;
 import android.widget.*;
 
@@ -95,9 +97,13 @@ public class MyTlc extends SherlockFragmentActivity {
         // Create a new preferences manager
         pf = new Preferences(this);
         // Set the theme of the app
-        applyTheme();
+        int logo = applyTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        ImageView imgLogo = (ImageView) findViewById(R.id.logo);
+
+        imgLogo.setImageDrawable(getResources().getDrawable(logo));
 
         try {
             String version = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
@@ -512,9 +518,12 @@ public class MyTlc extends SherlockFragmentActivity {
      *  RETURNS: void
      *  AUTHOR: Devin Collins <agent14709@gmail.com>
      *************/
-    private void applyTheme() {
+    private int applyTheme() {
         // Get the saved theme
         int theme = pf.getTheme();
+
+        int logo = R.drawable.mytlc_logo_blue;
+
         if (theme == 0) {
             // Check for the version of Android we're running and then
             // set the theme based on if we need ABS or no
@@ -523,24 +532,28 @@ public class MyTlc extends SherlockFragmentActivity {
             } else {
                 setTheme(R.style.Theme_BlueWhite);
             }
+            logo = R.drawable.mytlc_logo_blue;
         } else if (theme == 1) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 setTheme(R.style.Theme_Sherlock_OrangeBlack);
             } else {
                 setTheme(R.style.Theme_OrangeBlack);
             }
+            logo = R.drawable.mytlc_logo_orange;
         } else if (theme == 2) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 setTheme(R.style.Theme_Sherlock_RedWhite);
             } else {
                 setTheme(R.style.Theme_RedWhite);
             }
+            logo = R.drawable.mytlc_logo_red;
         } else if (theme == 3) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 setTheme(R.style.Theme_Sherlock_LightBlueWhite);
             } else {
                 setTheme(R.style.Theme_LightBlueWhite);
             }
+            logo = R.drawable.mytlc_logo_lightblue;
 //        } else if (theme == 4) {
 //            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 //                setTheme(R.style.Theme_Sherlock_YellowBlack);
@@ -553,7 +566,10 @@ public class MyTlc extends SherlockFragmentActivity {
             } else {
                 setTheme(R.style.Theme_BlueWhite);
             }
+            logo = R.drawable.mytlc_logo_blue;
         }
+
+        return logo;
     }
 
     public static class ChangelogDialog extends SherlockDialogFragment {

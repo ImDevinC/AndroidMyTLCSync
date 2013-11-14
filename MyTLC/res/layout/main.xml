@@ -4,6 +4,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="20dp">
+    <ImageView
+        android:layout_width="269dp"
+        android:layout_height="324dp"
+        android:id="@+id/logo"
+        android:src="@drawable/mytlc_logo_blue"
+        android:layout_gravity="center_horizontal"/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -32,17 +38,17 @@
             style="@style/ResultText"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
-<!--    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_horizontal">
-        <com.google.ads.AdView
-            xmlns:googleads="http://schemas.android.com/apk/lib/com.google.ads"
-            android:id="@+id/ad"
+    <!--    <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            googleads:adSize="BANNER"
-            googleads:adUnitId="@string/admob_id" />
-    </LinearLayout>-->
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal">
+            <com.google.ads.AdView
+                xmlns:googleads="http://schemas.android.com/apk/lib/com.google.ads"
+                android:id="@+id/ad"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                googleads:adSize="BANNER"
+                googleads:adUnitId="@string/admob_id" />
+        </LinearLayout>-->
 </LinearLayout>
