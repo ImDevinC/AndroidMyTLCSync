@@ -119,7 +119,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Create the notifcation manager that assigns our manager
         NotificationManager notMan = (NotificationManager) cContext.getSystemService(Context.NOTIFICATION_SERVICE);
         // Create the notification with our icon and the message we received
-        Notification not = new Notification(R.drawable.icon, msg, System.currentTimeMillis());
+        Notification not = new Notification(R.drawable.mytlc_logo_large_white, msg, System.currentTimeMillis());
         PendingIntent contentIntent = null;
         if (msg.startsWith("ERROR")) {
             msg = msg.replace("ERROR", "");
