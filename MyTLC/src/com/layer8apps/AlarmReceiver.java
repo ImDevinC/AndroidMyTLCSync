@@ -116,10 +116,10 @@ public class AlarmReceiver extends BroadcastReceiver {
      *  AUTHOR: Devin Collins <agent14709@gmail.com>
      *************/
     private void displayNotification(String msg) {
-        // Create the notifcation manager that assigns our manager
+        // Create the notification manager that assigns our manager
         NotificationManager notMan = (NotificationManager) cContext.getSystemService(Context.NOTIFICATION_SERVICE);
         // Create the notification with our icon and the message we received
-        Notification not = new Notification(R.drawable.mytlc_logo_large_white, msg, System.currentTimeMillis());
+        Notification not = new Notification(R.drawable.notification_logo, msg, System.currentTimeMillis());
         PendingIntent contentIntent = null;
         if (msg.startsWith("ERROR")) {
             msg = msg.replace("ERROR", "");
