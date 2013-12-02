@@ -23,9 +23,7 @@ package com.layer8apps;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.util.Set;
 
 /************
  *  PURPOSE: Stores all of our preferences and makes them easily retrievable
@@ -37,7 +35,6 @@ public class Preferences {
     static SharedPreferences settings;
     static SharedPreferences.Editor editor;
     private Context activity;
-    private String preferencesFile = "MyTLCSyncPreferences";
 
     /************
      *  PURPOSE: Public preferences reference

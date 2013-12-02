@@ -486,76 +486,13 @@ public class CalendarHandler extends IntentService {
                 }
             }
 
-            String address = pf.getAddress();
+            ArrayList<Shift> shifts = buildShifts();
+
+            shifts = checkForDuplicates(shifts);
 
             TimeZone zone = TimeZone.getDefault();
 
-            String timeAdjust = pf.getTimezone();
-
-            int time = 0;
-
-            if (timeAdjust != null) {
-                time = Integer.parseInt(timeAdjust);
-            }
-
-            for (String[] work : finalDays) {
-                Calendar beginTime = Calendar.getInstance();
-                /************
-                 * Below we create variables for our day, month and year.  We then
-                 * check to see if the scheduled day is next month or next year so
-                 * we know to increase our variables properly
-                 *************/
-                int workDay = Integer.parseInt(work[0].trim());
-                int workMonth = beginTime.get(Calendar.MONTH);
-                int workYear = beginTime.get(Calendar.YEAR);
-                /************
-                 * If the day of the month for work is prior to todays date, then
-                 * we check if we're in December.  We increase the month and year
-                 * where necessary
-                 *************/
-                if (workDay < beginTime.get(Calendar.DAY_OF_MONTH) && workMonth != 12) {
-                    workMonth += 1;
-                } else if (workDay < beginTime.get(Calendar.DAY_OF_MONTH)) {
-                    workMonth = 1;
-                    workYear += 1;
-                }
-                /************
-                 * If the shift starts in the PM, add 12 hours
-                 * to the time
-                 *************/
-
-                int workSHour = Integer.parseInt(work[1].substring(0, 2));
-                if (work[1].substring(6, 8).equalsIgnoreCase("PM") && workSHour != 12) {
-                    workSHour += 12;
-                } else if (work[1].substring(6, 8).equalsIgnoreCase("AM") && workSHour == 12) {
-                    workSHour = 0;
-                }
-
-                int workSMinute = Integer.parseInt(work[1].substring(3, 5));
-                beginTime.set(workYear, workMonth, workDay, workSHour, workSMinute);
-
-                beginTime.add(Calendar.HOUR, time);
-
-                int workEHour = Integer.parseInt(work[1].substring(11, 13));
-                /************
-                 * If the shift ends in the PM, add 12 hours
-                 * to the time
-                 *************/
-                if (work[1].substring(17, 19).equalsIgnoreCase("PM") && workEHour != 12) {
-                    workEHour += 12;
-                } else if (work[1].substring(17, 19).equalsIgnoreCase("AM") && workEHour == 12) {
-                    workEHour = 0;
-                }
-
-                int workEMinute = Integer.parseInt(work[1].substring(14, 16));
-                Calendar endTime = Calendar.getInstance();
-
-                if (workEHour < workSHour) {
-                    workDay += 1;
-                }
-                endTime.set(workYear, workMonth, workDay, workEHour, workEMinute);
-
-                endTime.add(Calendar.HOUR, time);
+            for (Shift shift : shifts) {
 
                 /************
                  * ContentResolver and ContentValues are what we use to add
@@ -570,21 +507,21 @@ public class CalendarHandler extends IntentService {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     cv.put(CalendarContract.Events.CALENDAR_ID, calID);
-                    cv.put(CalendarContract.Events.DESCRIPTION, work[2]);
-                    cv.put(CalendarContract.Events.DTEND, endTime.getTimeInMillis());
-                    cv.put(CalendarContract.Events.DTSTART, beginTime.getTimeInMillis());
-                    cv.put(CalendarContract.Events.EVENT_LOCATION, (address == null) ? "" : address);
+                    cv.put(CalendarContract.Events.DESCRIPTION, shift.getDepartment());
+                    cv.put(CalendarContract.Events.DTEND, shift.getEndDate().getTimeInMillis());
+                    cv.put(CalendarContract.Events.DTSTART, shift.getStartDate().getTimeInMillis());
+                    cv.put(CalendarContract.Events.EVENT_LOCATION, shift.getAddress());
                     cv.put(CalendarContract.Events.EVENT_TIMEZONE, zone.getID());
                     cv.put(CalendarContract.Events.HAS_ALARM, (notification == 0) ? 0 : 1);
-                    cv.put(CalendarContract.Events.TITLE, "Work@BestBuy");
+                    cv.put(CalendarContract.Events.TITLE, shift.getTitle());
                 } else {
                     cv.put("calendar_id", calID);
-                    cv.put("description", work[2]);
-                    cv.put("dtend", endTime.getTimeInMillis());
-                    cv.put("dtstart", beginTime.getTimeInMillis());
-                    cv.put("eventLocation", (address == null) ? "" : address);
+                    cv.put("description", shift.getDepartment());
+                    cv.put("dtend", shift.getEndDate().getTimeInMillis());
+                    cv.put("dtstart", shift.getStartDate().getTimeInMillis());
+                    cv.put("eventLocation", shift.getAddress());
                     cv.put("eventTimezone", zone.getID());
-                    cv.put("title", "Work@BestBuy");
+                    cv.put("title", shift.getTitle());
                     cv.put("hasAlarm", (notification <= 0) ? 0 : 1);
                 }
 
@@ -626,6 +563,106 @@ public class CalendarHandler extends IntentService {
         return true;
     }
 
+    private ArrayList<Shift> checkForDuplicates(ArrayList<Shift> newShifts) {
+        ArrayList<String> sId = new ArrayList<String>();
+
+        if (sId.size() == 0) {
+            return newShifts;
+        }
+
+        Calendar c = Calendar.getInstance();
+        ContentResolver cr = this.getContentResolver();
+        c.set(Calendar.HOUR, 0);
+        cr.delete(getEventsUri(), "CALENDAR_ID = " + calID + " EVENT_ID = " + c.getTimeInMillis(), null);
+
+        for (int x = sId.size() - 1; x >= 0; x--) {
+            
+        }
+
+        return newShifts;
+    }
+
+    private ArrayList<Shift> buildShifts() {
+        Preferences pf = new Preferences(this);
+
+        String address = pf.getAddress();
+
+        String timeAdjust = pf.getTimezone();
+
+        int time = 0;
+
+        if (timeAdjust != null) {
+            time = Integer.parseInt(timeAdjust);
+        }
+
+        ArrayList<Shift> shifts = new ArrayList<Shift>();
+
+        for (int x = finalDays.size() - 1; x >= 0; x--) {
+            String[] work = finalDays.get(x);
+            Calendar beginTime = Calendar.getInstance();
+            /************
+             * Below we create variables for our day, month and year.  We then
+             * check to see if the scheduled day is next month or next year so
+             * we know to increase our variables properly
+             *************/
+            int workDay = Integer.parseInt(work[0].trim());
+            int workMonth = beginTime.get(Calendar.MONTH);
+            int workYear = beginTime.get(Calendar.YEAR);
+            /************
+             * If the day of the month for work is prior to todays date, then
+             * we check if we're in December.  We increase the month and year
+             * where necessary
+             *************/
+            if (workDay < beginTime.get(Calendar.DAY_OF_MONTH) && workMonth != 12) {
+                workMonth += 1;
+            } else if (workDay < beginTime.get(Calendar.DAY_OF_MONTH)) {
+                workMonth = 1;
+                workYear += 1;
+            }
+            /************
+             * If the shift starts in the PM, add 12 hours
+             * to the time
+             *************/
+
+            int workSHour = Integer.parseInt(work[1].substring(0, 2));
+            if (work[1].substring(6, 8).equalsIgnoreCase("PM") && workSHour != 12) {
+                workSHour += 12;
+            } else if (work[1].substring(6, 8).equalsIgnoreCase("AM") && workSHour == 12) {
+                workSHour = 0;
+            }
+
+            int workSMinute = Integer.parseInt(work[1].substring(3, 5));
+            beginTime.set(workYear, workMonth, workDay, workSHour, workSMinute);
+
+            beginTime.add(Calendar.HOUR, time);
+
+            int workEHour = Integer.parseInt(work[1].substring(11, 13));
+            /************
+             * If the shift ends in the PM, add 12 hours
+             * to the time
+             *************/
+            if (work[1].substring(17, 19).equalsIgnoreCase("PM") && workEHour != 12) {
+                workEHour += 12;
+            } else if (work[1].substring(17, 19).equalsIgnoreCase("AM") && workEHour == 12) {
+                workEHour = 0;
+            }
+
+            int workEMinute = Integer.parseInt(work[1].substring(14, 16));
+            Calendar endTime = Calendar.getInstance();
+
+            if (workEHour < workSHour) {
+                workDay += 1;
+            }
+            endTime.set(workYear, workMonth, workDay, workEHour, workEMinute);
+
+            endTime.add(Calendar.HOUR, time);
+
+            shifts.add(new Shift("Work@BestBuy", work[2], (address == null) ? "" : address, beginTime, endTime));
+        }
+
+        return shifts;
+    }
+
     /************
      *  PURPOSE: Deletes all current and future Work@BestBuy events from the calendar
      *  ARGUMENTS: NULL
@@ -638,6 +675,8 @@ public class CalendarHandler extends IntentService {
         c.set(Calendar.HOUR, 0);
         cr.delete(getEventsUri(), "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
     }
+
+
 
     /************
      *  PURPOSE: Gets the Uri for events based on Android version number

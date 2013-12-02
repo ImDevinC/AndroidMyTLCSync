@@ -1,5 +1,3 @@
-package com.layer8apps;
-
 /*
  * Copyright 2012, 2013 Devin Collins <agent1709@gmail.com>,
  * Bobby Ore <bob1987@gmail.com>, Casey Stark <starkca90@gmail.com>
@@ -20,18 +18,14 @@ package com.layer8apps;
  * along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+package com.layer8apps;
+
 import android.app.Activity;
 import android.content.Context;
-import android.location.*;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 public class StoreHelper {
 
