@@ -91,6 +91,14 @@ public class CalendarHandler extends IntentService {
         }
     }
 
+    private boolean isTlcActive(String data) {
+        if (data.contains("top.location = '/etm/time/timesheet/etmTnsMonth.jsp';return false")) {
+            return true;
+        }
+
+        return false;
+    }
+
     /************
      *  PURPOSE: Handles the primary thread in the service
      *  ARGUMENTS: Intent intent
@@ -143,6 +151,12 @@ public class CalendarHandler extends IntentService {
             }
             return;
         }
+
+        if (postResults == null || !isTlcActive(postResults)) {
+            showError("MyTLC is currently undergoing updates, please try again later");
+            return;
+        }
+
         // If we logged in properly, then we download the schedule
         if (postResults != null && postResults.contains("etmMenu.jsp")) {
             // Here is the actual call for the schedule
