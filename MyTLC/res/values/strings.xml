@@ -59,7 +59,8 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; Updated app for changes to MyTLC</item>
+        <item>&#x2022; Added logo from Agent Nicholson</item>
+        <item>&#x2022; Added support for MyTLC maintenance times</item>
     </string-array>
 
     <string-array name="daysOfWeek">
