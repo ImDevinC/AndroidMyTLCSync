@@ -20,8 +20,8 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.layer8apps"
-          android:versionCode="15"
-          android:versionName="1.12">
+          android:versionCode="16"
+          android:versionName="1.13">
     <uses-sdk android:minSdkVersion="7"
               android:targetSdkVersion="15"/>
     <uses-permission android:name="android.permission.INTERNET"/>

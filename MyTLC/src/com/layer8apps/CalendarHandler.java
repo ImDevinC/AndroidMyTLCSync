@@ -92,7 +92,7 @@ public class CalendarHandler extends IntentService {
     }
 
     private boolean isTlcActive(String data) {
-        if (data.contains("top.location = '/etm/time/timesheet/etmTnsMonth.jsp';return false")) {
+        if (data.contains("/etm/time/timesheet/etmTnsMonth.jsp")) {
             return true;
         }
 
@@ -152,17 +152,7 @@ public class CalendarHandler extends IntentService {
             return;
         }
 
-        if (postResults == null || !isTlcActive(postResults)) {
-            showError("MyTLC is currently undergoing updates, please try again later");
-            return;
-        }
-
-        // If we logged in properly, then we download the schedule
-        if (postResults != null && postResults.contains("etmMenu.jsp")) {
-            // Here is the actual call for the schedule
-            updateStatus("Retrieving schedule...");
-            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
-        } else {
+        if (postResults == null || !postResults.contains("etmMenu.jsp")) {
             String error = parseError(postResults);
             if (error != null) {
                 showError(error);
@@ -171,6 +161,15 @@ public class CalendarHandler extends IntentService {
             }
             return;
         }
+
+        if (postResults != null && isTlcActive(postResults)) {
+            updateStatus("Retrieving schedule...");
+            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
+        } else {
+            showError("MyTLC is currently undergoing updates, please try again later");
+            return;
+        }
+
         // If we successfully got the information, then parse out the schedule to read it properly
         String secToken = null;
         if (postResults != null) {
