@@ -59,8 +59,9 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; Added logo from Agent Nicholson</item>
-        <item>&#x2022; Added support for MyTLC maintenance times</item>
+        <item>&#x2022; 1.13.0 - Added logo from Agent Nicholson</item>
+        <item>&#x2022; 1.13.0 - Added support for MyTLC maintenance times</item>
+        <item>&#x2022; 1.13.1 - Fixed issue with logo sizing </item>
     </string-array>
 
     <string-array name="daysOfWeek">

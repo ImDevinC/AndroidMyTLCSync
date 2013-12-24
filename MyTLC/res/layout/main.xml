@@ -24,8 +24,8 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     android:layout_height="fill_parent"
     android:padding="20dp">
     <ImageView
-        android:layout_width="269dp"
-        android:layout_height="324dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/logo"
         android:src="@drawable/mytlc_logo_blue"
         android:layout_gravity="center_horizontal"/>
