@@ -152,7 +152,10 @@ public class CalendarHandler extends IntentService {
             return;
         }
 
-        if (postResults == null || !postResults.contains("etmMenu.jsp")) {
+        if (postResults != null && postResults.contains("etmMenu.jsp")) {
+            updateStatus("Retrieving schedule...");
+            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
+        } else {
             String error = parseError(postResults);
             if (error != null) {
                 showError(error);
@@ -162,13 +165,13 @@ public class CalendarHandler extends IntentService {
             return;
         }
 
-        if (postResults != null && isTlcActive(postResults)) {
-            updateStatus("Retrieving schedule...");
-            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
-        } else {
-            showError("MyTLC is currently undergoing updates, please try again later");
-            return;
-        }
+//        if (postResults != null && isTlcActive(postResults)) {
+//            updateStatus("Retrieving schedule...");
+//            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
+//        } else {
+//            showError("MyTLC is currently undergoing updates, please try again later");
+//            return;
+//        }
 
         // If we successfully got the information, then parse out the schedule to read it properly
         String secToken = null;

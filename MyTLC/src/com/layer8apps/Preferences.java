@@ -493,4 +493,44 @@ public class Preferences {
     public void deleteTimezone() {
         deleteTag("timezone");
     }
+
+    /************
+     *  PURPOSE: Set the number of stored shifts
+     *  ARGUMENTS: int numShifts
+     *  RETURNS: boolean
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public boolean setNumberOfShifts(int numShifts) {
+        saveInt("numShifts", numShifts);
+        int verify = getInt("numShifts");
+        return (verify == numShifts);
+    }
+
+    /************
+     *  PURPOSE: Get the number of stored shifts
+     *  ARGUMENTS: null
+     *  RETURNS: int
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public int getNumberOfShifts() {
+        return getInt("numShifts");
+    }
+
+    /************
+     *  PURPOSE: Delete the number of shifts setting
+     *  ARGUMENTS: null
+     *  RETURNS: void
+     *  AUTHOR: Devin Collins <agent14709@gmail.com>
+     ************/
+    public void deleteNumShifts() {
+        deleteTag("numShifts");
+    }
+
+    public boolean setSavedShifts(String[] savedShifts) {
+        for (int x = 0; x < savedShifts.length; x++) {
+            saveString("shift" + x, savedShifts[x]);
+        }
+
+        return true;
+    }
 }
