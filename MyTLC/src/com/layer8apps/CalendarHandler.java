@@ -128,14 +128,10 @@ public class CalendarHandler extends IntentService {
         if (tempToken != null) {
             loginToken = parseToken(tempToken);
         } else {
-            String error = parseError(tempToken);
-            if (error != null) {
-                showError(error);
-            } else {
-                showError("Error retrieving your login token, make sure you have a valid network connection");
-            }
+            showError("Error connecting to MyTLC, make sure you have a valid network connection");
             return;
         }
+
         String postResults = null;
         // This creates our login information
         List<NameValuePair> parameters = createParams();
@@ -143,16 +139,11 @@ public class CalendarHandler extends IntentService {
             // Here we send the information to the server and login
             postResults = conn.postData(url + "/etm/login.jsp", parameters);
         } else {
-            String error = parseError(postResults);
-            if (error != null) {
-                showError(error);
-            } else {
-                showError("Error retrieving your login token, make sure you have a valid network connection");
-            }
+            showError("Error retrieving your login token");
             return;
         }
 
-        if (postResults != null && postResults.contains("etmMenu.jsp")) {
+        if (postResults != null && postResults.toLowerCase().contains("etmmenu.jsp")) {
             updateStatus("Retrieving schedule...");
             postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
         } else {
@@ -181,14 +172,10 @@ public class CalendarHandler extends IntentService {
             secToken = parseSecureToken(postResults);
             wbat = parseWbat(postResults);
         } else {
-            String error = parseError(postResults);
-            if (error != null) {
-                showError(error);
-            } else {
-                showError("Could not obtain user schedule, make sure you have a valid network connection");
-            }
+            showError("Could not obtain user schedule");
             return;
         }
+
         if (secToken != null) {
             parameters = createSecondParams(secToken);
             postResults = conn.postData(url + "/etm/time/timesheet/etmTnsMonth.jsp", parameters);
@@ -197,22 +184,19 @@ public class CalendarHandler extends IntentService {
             if (error != null) {
                 showError(error);
             } else {
-                showError("Error retrieving your login token, make sure you have a valid network connection");
+                showError("Error retrieving your security token");
             }
             return;
         }
+
         List<String[]> secondMonth = null;
         if (postResults != null) {
             secondMonth = parseSchedule(postResults);
         } else {
-            String error = parseError(postResults);
-            if (error != null) {
-                showError(error);
-            } else {
-                showError("Could not obtain user schedule, make sure you have a valid network connection");
-            }
-            return;
+           showError("Could not obtain user schedule");
+           return;
         }
+
         if (secondMonth != null) {
             if (workDays == null) {
                 workDays = secondMonth;
@@ -225,10 +209,11 @@ public class CalendarHandler extends IntentService {
             if (error != null) {
                 showError(error);
             } else {
-                showError("There was an error retrieving your schedule, please try again");
+                showError("There was an error retrieving your schedule");
             }
             return;
         }
+
         // Add our shifts to the calendar
         updateStatus("Adding shifts to calendar...");
         if (finalDays != null && addDays()) {
@@ -244,8 +229,7 @@ public class CalendarHandler extends IntentService {
                 // Nothing
             }
         } else {
-            showError("Couldn't add your shifts to your calendar, please try again");
-            return;
+            showError("Couldn't add your shifts to your calendar");
         }
     }
 
@@ -258,11 +242,12 @@ public class CalendarHandler extends IntentService {
     private String parseError(String data) {
         String result = null;
         try {
-            if (!data.contains("<b>System Error</b>") && !data.contains("Message:")) {
-                return result;
+            if (!data.toLowerCase().contains("<b>system error</b>") &&
+                    !data.toLowerCase().contains("message:")) {
+                return null;
             }
-            result = data.substring(data.indexOf("Message:") + 8);
-            result = result.substring(0, result.indexOf("<br>"));
+            result = data.substring(data.toLowerCase().indexOf("message:") + 8);
+            result = result.substring(0, result.toLowerCase().indexOf("<br>"));
             result = "MyTLC Error: " + result.trim();
         } catch (Exception e) {
             return null;
@@ -280,8 +265,9 @@ public class CalendarHandler extends IntentService {
     private String parseToken(String token) {
         String tempToken;
         try {
-            tempToken = token.substring(token.indexOf("End Hotkey for submit"));
-            tempToken = tempToken.substring(tempToken.indexOf("hidden") + 14, tempToken.indexOf("url_login_token") - 7);
+            tempToken = token.substring(token.toLowerCase().indexOf("end hotkey for submit"));
+            tempToken = tempToken.substring(tempToken.toLowerCase().indexOf("hidden") + 14,
+                    tempToken.toLowerCase().indexOf("url_login_token") - 7);
             return tempToken;
         } catch (Exception e) {
             return null;
@@ -297,17 +283,19 @@ public class CalendarHandler extends IntentService {
      *************/
     private String parseSecureToken(String token) {
         String tempToken;
-        if (token.contains("secureToken")) {
+        if (token.toLowerCase().contains("secureToken")) {
             try {
-                tempToken = token.substring(token.indexOf("secureToken") + 20, token.indexOf("'/>"));
+                tempToken = token.substring(token.toLowerCase().indexOf("secureToken") + 20,
+                        token.indexOf("'/>"));
                 return tempToken;
             } catch (Exception e) {
                 return null;
             }
-        } else if (token.contains("id='wbat")) {
+        } else if (token.toLowerCase().contains("id='wbat")) {
             try {
-                token = token.substring(token.indexOf("name='wbat'"));
-                tempToken = token.substring(token.indexOf("id='wbat") + 17, token.indexOf("'>"));
+                token = token.substring(token.toLowerCase().indexOf("name='wbat'"));
+                tempToken = token.substring(token.toLowerCase().indexOf("id='wbat") + 17,
+                        token.indexOf("'>"));
                 return tempToken;
             } catch (Exception e) {
                 return null;
@@ -324,10 +312,11 @@ public class CalendarHandler extends IntentService {
      *************/
     private String parseWbat(String token) {
         String tempToken;
-        if (token.contains("id='wbat")) {
+        if (token.toLowerCase().contains("id='wbat")) {
             try {
-                token = token.substring(token.indexOf("name='wbat'"));
-                tempToken = token.substring(token.indexOf("id='wbat") + 17, token.indexOf("'>"));
+                token = token.substring(token.toLowerCase().indexOf("name='wbat'"));
+                tempToken = token.substring(token.toLowerCase().indexOf("id='wbat") + 17,
+                        token.indexOf("'>"));
                 return tempToken;
             } catch (Exception e) {
                 return null;
@@ -417,26 +406,35 @@ public class CalendarHandler extends IntentService {
     private List<String[]> parseSchedule(String data) {
         List<String[]> workingDays = new ArrayList<String[]>();
         try {
-            String tempSchedule = data.substring(data.indexOf("calWeekDayHeader"));
-            tempSchedule = tempSchedule.substring(0, tempSchedule.indexOf("document.forms[0].NEW_MONTH_YEAR"));
+            String tempSchedule = data.substring(data.toLowerCase().indexOf("calweekdayheader"));
+            tempSchedule = tempSchedule.substring(0,
+                    tempSchedule.toLowerCase().indexOf("document.forms[0].new_month_year"));
             String[] schedules = tempSchedule.split("</tr>");
             for (int x = 0; x < schedules.length - 1; x++) {
-                if (!schedules[x].contains("OFF")) {
-                    if (schedules[x].contains("calendarCellRegularCurrent") || schedules[x].contains("calendarCellRegularFuture")) {
+                if (!schedules[x].toLowerCase().contains("off")) {
+                    if (schedules[x].toLowerCase().contains("calendarcellregularcurrent") ||
+                            schedules[x].toLowerCase().contains("calendarcellregularfuture")) {
                         String date;
-                        if (schedules[x].contains("calendarCellRegularCurrent")) {
-                            date = schedules[x].substring(schedules[x].indexOf("calendarDateCurrent") + 23, schedules[x].indexOf("</span>"));
+                        if (schedules[x].toLowerCase().contains("calendarcellregularcurrent")) {
+                            date = schedules[x].substring(
+                                    schedules[x].toLowerCase().indexOf("calendardatecurrent") + 23,
+                                    schedules[x].toLowerCase().indexOf("</span>"));
                         } else {
-                            date = schedules[x].substring(schedules[x].indexOf("calendarDateNormal") + 22, schedules[x].indexOf("</span>"));
+                            date = schedules[x].substring(
+                                    schedules[x].toLowerCase().indexOf("calendardatenormal") + 22,
+                                    schedules[x].toLowerCase().indexOf("</span>"));
                         }
                         String shifts[] = schedules[x].split("<br>");
                         for (int i = 0; i < shifts.length - 1; i++) {
-                            if (shifts[i].contains("AM") && !shifts[i].contains("<td>") || shifts[i].contains("PM") && !shifts[i].contains("<td>")) {
+                            if (shifts[i].toLowerCase().contains("am") &&
+                                    !shifts[i].toLowerCase().contains("<td>") ||
+                                    shifts[i].toLowerCase().contains("pm") &&
+                                    !shifts[i].toLowerCase().contains("<td>")) {
                                 String dept = "";
                                 if (i != shifts.length - 1) {
-                                    dept = (shifts[i+1].startsWith("L-")) ? shifts[i + 1] : "";
+                                    dept = (shifts[i+1].toLowerCase().startsWith("l-")) ? shifts[i + 1] : "";
                                 }
-                                if (!dept.startsWith("SICK-U")) {
+                                if (!dept.toLowerCase().startsWith("sick-u")) {
                                     workingDays.add(new String[]{date, shifts[i], dept});
                                 }
                             }
@@ -556,20 +554,18 @@ public class CalendarHandler extends IntentService {
                     /************
                      * Build our reminder based on version code
                      *************/
-                    if (notification != 0) {
-                        ContentValues reminders = new ContentValues();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                            reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
-                            reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
-                            reminders.put(CalendarContract.Reminders.MINUTES, notification);
-                        } else {
-                            reminders.put("event_id", eventID);
-                            reminders.put("method", 1);
-                            reminders.put("minutes", notification);
-                        }
-                        // Add the reminder to the system
-                        cr.insert(getRemindersUri(), reminders);
+                    ContentValues reminders = new ContentValues();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        reminders.put(CalendarContract.Reminders.EVENT_ID, eventID);
+                        reminders.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+                        reminders.put(CalendarContract.Reminders.MINUTES, notification);
+                    } else {
+                        reminders.put("event_id", eventID);
+                        reminders.put("method", 1);
+                        reminders.put("minutes", notification);
                     }
+                    // Add the reminder to the system
+                    cr.insert(getRemindersUri(), reminders);
                 }
             }
         } catch (Exception e) {
