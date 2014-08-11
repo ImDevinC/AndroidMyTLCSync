@@ -413,7 +413,7 @@ public class CalendarHandler extends IntentService {
             for (int x = 0; x < schedules.length - 1; x++) {
                 if (!schedules[x].toLowerCase().contains("off")) {
                     if (schedules[x].toLowerCase().contains("calendarcellregularcurrent") ||
-                            schedules[x].toLowerCase().contains("calendarcellregularfuture")) {
+							schedules[x].toLowerCase().contains("calendarcellregularfuture")) {
                         String date;
                         if (schedules[x].toLowerCase().contains("calendarcellregularcurrent")) {
                             date = schedules[x].substring(
@@ -424,8 +424,13 @@ public class CalendarHandler extends IntentService {
                                     schedules[x].toLowerCase().indexOf("calendardatenormal") + 22,
                                     schedules[x].toLowerCase().indexOf("</span>"));
                         }
+
+						schedules[x] = schedules[x].substring(schedules[x].toLowerCase().
+								indexOf("calendartextshiftname") + 26);
+
                         String shifts[] = schedules[x].split("<br>");
                         for (int i = 0; i < shifts.length - 1; i++) {
+
                             if (shifts[i].toLowerCase().contains("am") &&
                                     !shifts[i].toLowerCase().contains("<td>") ||
                                     shifts[i].toLowerCase().contains("pm") &&
@@ -435,7 +440,7 @@ public class CalendarHandler extends IntentService {
                                     dept = (shifts[i+1].toLowerCase().startsWith("l-")) ? shifts[i + 1] : "";
                                 }
                                 if (!dept.toLowerCase().startsWith("sick-u")) {
-                                    workingDays.add(new String[]{date, shifts[i], dept});
+                                    workingDays.add(new String[]{date.trim(), shifts[i].trim(), dept.trim()});
                                 }
                             }
                         }

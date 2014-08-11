@@ -20,10 +20,10 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.layer8apps"
-          android:versionCode="19"
-          android:versionName="1.13.3">
+          android:versionCode="20"
+          android:versionName="1.14">
     <uses-sdk android:minSdkVersion="7"
-              android:targetSdkVersion="15"/>
+              android:targetSdkVersion="19"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>

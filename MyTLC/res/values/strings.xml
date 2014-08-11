@@ -59,7 +59,8 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; 1.13.3 - Added fix for users getting messages about invalid network connection or invalid credentials</item>
+        <item>&#x2022; 1.14 - Added support for latest MyTLC upgrade</item>
+        <item>&#x2022; 1.14 - Removed excess white characters where not needed</item>
     </string-array>
 
     <string-array name="daysOfWeek">
