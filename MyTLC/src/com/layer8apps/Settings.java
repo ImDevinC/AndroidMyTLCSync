@@ -49,7 +49,7 @@ public class Settings extends SherlockActivity {
 
     private Spinner spinCal, spinSync, spinWeekly, spinTheme, spinNotifications, spinTimezone;
     private Button btnStore, btnSync;
-    private EditText txtStore, txtAddress;
+    private EditText txtStore, txtAddress, txtName;
     private TextView txtSync;
     int hour = 0;
     int minute = 0;
@@ -81,6 +81,7 @@ public class Settings extends SherlockActivity {
 
         txtAddress = (EditText) findViewById(R.id.txtAddress);
         txtStore = (EditText) findViewById(R.id.txtStore);
+		txtName = (EditText) findViewById(R.id.txtName);
 
         spinCal = (Spinner) findViewById(R.id.spinCals);
         spinSync = (Spinner) findViewById(R.id.spinSync);
@@ -462,6 +463,12 @@ public class Settings extends SherlockActivity {
             txtAddress.setText(address);
         }
 
+		String name = pf.getEventName();
+
+		if (name != null) {
+			txtName.setText(name);
+		}
+
         return true;
     }
 
@@ -643,7 +650,14 @@ public class Settings extends SherlockActivity {
             } else {
                 pf.setAddress(txtAddress.getText().toString().trim());
             }
-            // Set the theme based on what the user has selected
+
+			String eventName = txtName.getText().toString();
+
+			if (eventName != null) {
+				pf.setEventName(eventName);
+			}
+
+			// Set the theme based on what the user has selected
             pf.setTheme(spinTheme.getSelectedItemPosition());
             // If the theme has changed...
             if (themeChanged) {

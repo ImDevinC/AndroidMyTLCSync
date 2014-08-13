@@ -29,6 +29,16 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
         android:orientation="vertical">
         <TextView
             style="@style/SettingsText"
+            android:text="@string/event_title"/>
+        <EditText
+            android:id="@+id/txtName"
+            android:hint="@string/event_title_expanded"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:singleLine="true"/>
+        <TextView
+            style="@style/SettingsText"
             android:text="@string/default_calendar" />
         <Spinner
             android:id="@+id/spinCals"

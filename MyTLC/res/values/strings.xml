@@ -32,6 +32,8 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     <string name="current_location">Use Current Location</string>
     <string name="current_sync_time">Check schedule at</string>
     <string name="default_calendar">Default Calendar&#8230;</string>
+    <string name="event_title">Event Title</string>
+    <string name="event_title_expanded">Title for events on your calendar</string>
     <string name="file">user_data</string>
     <string name="get_address">Get Address</string>
     <string name="login">Login</string>
@@ -61,6 +63,9 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     <string-array name="changes">
         <item>&#x2022; 1.14 - Added support for latest MyTLC upgrade</item>
         <item>&#x2022; 1.14 - Removed excess white characters where not needed</item>
+        <item>&#x2022; 1.14.1 - Added status message from MyTLC</item>
+        <item>&#x2022; 1.14.2 - Added ability to add custom names to events</item>
+        <item>&#x2022; 1.14.2 - Duplicate shifts are no longer displayed as "new" shifts</item>
     </string-array>
 
     <string-array name="daysOfWeek">

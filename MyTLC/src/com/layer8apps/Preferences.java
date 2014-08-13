@@ -23,6 +23,9 @@ package com.layer8apps;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.Set;
 
 /************
@@ -495,18 +498,6 @@ public class Preferences {
     }
 
     /************
-     *  PURPOSE: Set the number of stored shifts
-     *  ARGUMENTS: int numShifts
-     *  RETURNS: boolean
-     *  AUTHOR: Devin Collins <agent14709@gmail.com>
-     ************/
-    public boolean setNumberOfShifts(int numShifts) {
-        saveInt("numShifts", numShifts);
-        int verify = getInt("numShifts");
-        return (verify == numShifts);
-    }
-
-    /************
      *  PURPOSE: Get the number of stored shifts
      *  ARGUMENTS: null
      *  RETURNS: int
@@ -526,11 +517,52 @@ public class Preferences {
         deleteTag("numShifts");
     }
 
-    public boolean setSavedShifts(String[] savedShifts) {
-        for (int x = 0; x < savedShifts.length; x++) {
-            saveString("shift" + x, savedShifts[x]);
+    public boolean setSavedShifts(ArrayList<String> savedShifts) {
+		saveInt("numShifts", savedShifts.size());
+
+        for (int x = 0; x < savedShifts.size(); x++) {
+            saveString("shift" + x, savedShifts.get(x));
         }
 
         return true;
     }
+
+	public ArrayList<String> getSavedShifts() {
+		int numShifts = getNumberOfShifts();
+
+		ArrayList<String> shifts = new ArrayList<String>();
+
+		for (int x = 0; x < numShifts; x++) {
+			shifts.add(getString("shift" + x));
+		}
+
+		return shifts;
+	}
+
+	public void saveShift(String id) {
+		ArrayList<String> shifts = getSavedShifts();
+		shifts.add(id);
+		setSavedShifts(shifts);
+	}
+
+	public void deleteShift(String id) {
+		ArrayList<String> shifts = getSavedShifts();
+
+		for (String shift : shifts) {
+			if (shift.equals(id)) {
+				shifts.remove(id);
+				break;
+			}
+		}
+
+		setSavedShifts(shifts);
+	}
+
+	public void setEventName(String name) {
+		saveString("eventName", name);
+	}
+
+	public String getEventName() {
+		return getString("eventName");
+	}
 }

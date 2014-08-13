@@ -21,6 +21,7 @@
 package com.layer8apps;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -73,6 +74,7 @@ public class MyTlc extends SherlockFragmentActivity {
      ************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         /*************
          * The following try statement makes the app think that the user doesn't
          * have a hard settings button.  This allows the options menu to always be
@@ -197,6 +199,7 @@ public class MyTlc extends SherlockFragmentActivity {
 		if (item.getItemId() == R.id.login) {
             // Start the login process
             login();
+			ArrayList<String> shifts = pf.getSavedShifts();
             return true;
         } else if (item.getItemId() == R.id.settings) {
             // Create a new instance of the Settings intent
@@ -315,6 +318,12 @@ public class MyTlc extends SherlockFragmentActivity {
                 }
             }
         }
+
+		String eventName = pf.getEventName();
+
+		if (eventName == null) {
+			pf.setEventName("Work@BestBuy");
+		}
     }
 
     /************

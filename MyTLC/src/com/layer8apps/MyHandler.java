@@ -108,7 +108,11 @@ public class MyHandler extends Handler {
                 } else if (result.equals("DONE")) {
                     // Get the number of shifts from the message
                     int count = message.getData().getInt("count", 0);
-                    sMessage = "Added " + count + " shifts to the calendar";
+					if (count == 0) {
+						sMessage = "No new shifts to add";
+					} else {
+						sMessage = "Added " + count + " shifts to the calendar";
+					}
                     // Get rid of the dialog box
                     progress.dismiss();
                     TextView txtResult = (TextView) activity.findViewById(R.id.results);

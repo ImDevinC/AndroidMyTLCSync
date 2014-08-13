@@ -24,8 +24,10 @@ import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.*;
+import android.preference.Preference;
 import android.provider.CalendarContract;
 import android.util.Log;
 import org.apache.http.NameValuePair;
@@ -143,7 +145,8 @@ public class CalendarHandler extends IntentService {
             return;
         }
 
-        if (postResults != null && postResults.toLowerCase().contains("etmmenu.jsp")) {
+        if (postResults != null && postResults.toLowerCase().contains("etmmenu.jsp") &&
+				!postResults.toLowerCase().contains("<font size=\"2\">")) {
             updateStatus("Retrieving schedule...");
             postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
         } else {
@@ -156,14 +159,6 @@ public class CalendarHandler extends IntentService {
             return;
         }
 
-//        if (postResults != null && isTlcActive(postResults)) {
-//            updateStatus("Retrieving schedule...");
-//            postResults = conn.getData(url + "/etm/time/timesheet/etmTnsMonth.jsp");
-//        } else {
-//            showError("MyTLC is currently undergoing updates, please try again later");
-//            return;
-//        }
-
         // If we successfully got the information, then parse out the schedule to read it properly
         String secToken = null;
         if (postResults != null) {
@@ -172,8 +167,8 @@ public class CalendarHandler extends IntentService {
             secToken = parseSecureToken(postResults);
             wbat = parseWbat(postResults);
         } else {
-            showError("Could not obtain user schedule");
-            return;
+			showError("Could not obtain user schedule");
+			return;
         }
 
         if (secToken != null) {
@@ -216,12 +211,14 @@ public class CalendarHandler extends IntentService {
 
         // Add our shifts to the calendar
         updateStatus("Adding shifts to calendar...");
-        if (finalDays != null && addDays()) {
+		int numShifts = addDays();
+
+        if (finalDays != null && numShifts > -1) {
             // Report back that we're successful!
             Message msg = Message.obtain();
             Bundle b = new Bundle();
             b.putString("status", "DONE");
-            b.putInt("count", workDays.size());
+            b.putInt("count", numShifts);
             msg.setData(b);
             try {
                 messenger.send(msg);
@@ -242,13 +239,12 @@ public class CalendarHandler extends IntentService {
     private String parseError(String data) {
         String result = null;
         try {
-            if (!data.toLowerCase().contains("<b>system error</b>") &&
-                    !data.toLowerCase().contains("message:")) {
-                return null;
+			if (!data.toLowerCase().contains("<font ")) {
+			    return null;
             }
-            result = data.substring(data.toLowerCase().indexOf("message:") + 8);
-            result = result.substring(0, result.toLowerCase().indexOf("<br>"));
-            result = "MyTLC Error: " + result.trim();
+			result = data.substring(data.toLowerCase().indexOf("<font ") + 15);
+			result = result.substring(0, result.toLowerCase().indexOf("</font>"));
+			result = "MyTLC Error: " + result.trim();
         } catch (Exception e) {
             return null;
         }
@@ -460,9 +456,11 @@ public class CalendarHandler extends IntentService {
      *  RETURNS: VOID
      *  AUTHOR: Devin Collins <agent14709@gmail.com>, Bobby Ore <bob1987@gmail.com>
      *************/
-    private boolean addDays() {
+    private int addDays() {
+		ArrayList<Shift> shifts = buildShifts();
+
         try {
-            deleteOldEvents();
+//            deleteOldEvents();
             Preferences pf = new Preferences(this);
             // Get our stored notification time
             int notification = pf.getNotification();
@@ -505,9 +503,11 @@ public class CalendarHandler extends IntentService {
                 }
             }
 
-            ArrayList<Shift> shifts = buildShifts();
-
             shifts = checkForDuplicates(shifts);
+
+			if (shifts.size() == 0) {
+				return 0;
+			}
 
             TimeZone zone = TimeZone.getDefault();
 
@@ -549,12 +549,20 @@ public class CalendarHandler extends IntentService {
                  *************/
                 Uri uri = cr.insert(getEventsUri(), cv);
 
+				if (uri == null) {
+					continue;
+				}
+
+				// Get the ID of the calendar event
+				long eventID = Long.parseLong(uri.getLastPathSegment());
+
+				pf.saveShift(String.valueOf(eventID));
+
                 /************
                  * If we retrieved a Uri for the event, try to add the reminder
                  *************/
-                if (uri != null && notification > 0) {
-                    // Get the ID of the calendar event
-                    long eventID = Long.parseLong(uri.getLastPathSegment());
+                if (notification > 0) {
+
 
                     /************
                      * Build our reminder based on version code
@@ -575,29 +583,63 @@ public class CalendarHandler extends IntentService {
             }
         } catch (Exception e) {
             showError("Could not create calendar events on calendar, please make sure you have a calendar application on your device");
-            return false;
+            return -1;
         }
-        return true;
+
+        return shifts.size();
     }
 
     private ArrayList<Shift> checkForDuplicates(ArrayList<Shift> newShifts) {
-        ArrayList<String> sId = new ArrayList<String>();
+		Preferences pf = new Preferences(this);
+		ArrayList<String> oldShifts = pf.getSavedShifts();
 
-        if (sId.size() == 0) {
-            return newShifts;
-        }
+		ContentResolver cr = getContentResolver();
 
-        Calendar c = Calendar.getInstance();
-        ContentResolver cr = this.getContentResolver();
-        c.set(Calendar.HOUR, 0);
-        cr.delete(getEventsUri(), "CALENDAR_ID = " + calID + " EVENT_ID = " + c.getTimeInMillis(), null);
+		for (String id : oldShifts) {
+			Cursor cursor = cr.query(getEventsUri(), new String[]{"dtstart", "dtend"},
+					"CALENDAR_ID = " + calID + " AND _ID = " + id, null, null);
 
-        for (int x = sId.size() - 1; x >= 0; x--) {
-            
-        }
+			if (!cursor.moveToFirst()) {
+				continue;
+			}
 
-        return newShifts;
-    }
+			do {
+				Calendar now = Calendar.getInstance();
+
+				Calendar startTime = Calendar.getInstance();
+				startTime.setTimeInMillis(cursor.getLong(0));
+
+				Calendar endTime = Calendar.getInstance();
+				endTime.setTimeInMillis(cursor.getLong(1));
+
+				if (endTime.compareTo(now) == -1) {
+					deleteShift(id);
+					continue;
+				}
+
+				boolean shiftFound = false;
+
+				for (Shift shift : newShifts) {
+					if (shift.getStartDate().get(Calendar.HOUR_OF_DAY) == startTime.get(Calendar.HOUR_OF_DAY) &&
+							shift.getEndDate().get(Calendar.MINUTE) == shift.getEndDate().get(Calendar.MINUTE)) {
+						newShifts.remove(shift);
+						shiftFound = true;
+						break;
+					}
+				}
+
+				if (!shiftFound) {
+					cr.delete(getEventsUri(), "CALENDAR_ID = " + calID + " AND _ID = " + String.valueOf(id), null);
+				}
+			} while (cursor.moveToNext());
+		}
+		return newShifts;
+	}
+
+	private void deleteShift(String id) {
+		Preferences pf = new Preferences(this);
+		pf.deleteShift(id);
+	}
 
     private ArrayList<Shift> buildShifts() {
         Preferences pf = new Preferences(this);
@@ -605,6 +647,8 @@ public class CalendarHandler extends IntentService {
         String address = pf.getAddress();
 
         String timeAdjust = pf.getTimezone();
+
+		String eventName = pf.getEventName();
 
         int time = 0;
 
@@ -674,26 +718,11 @@ public class CalendarHandler extends IntentService {
 
             endTime.add(Calendar.HOUR, time);
 
-            shifts.add(new Shift("Work@BestBuy", work[2], (address == null) ? "" : address, beginTime, endTime));
+            shifts.add(new Shift(eventName, work[2], (address == null) ? "" : address, beginTime, endTime));
         }
 
         return shifts;
     }
-
-    /************
-     *  PURPOSE: Deletes all current and future Work@BestBuy events from the calendar
-     *  ARGUMENTS: NULL
-     *  RETURNS: VOID
-     *  AUTHOR: Devin Collins <agent14709@gmail.com>
-     *************/
-    private void deleteOldEvents() {
-        Calendar c = Calendar.getInstance();
-        ContentResolver cr = this.getContentResolver();
-        c.set(Calendar.HOUR, 0);
-        cr.delete(getEventsUri(), "CALENDAR_ID = " + calID + " AND TITLE = 'Work@BestBuy' AND DTEND >= " + c.getTimeInMillis(), null);
-    }
-
-
 
     /************
      *  PURPOSE: Gets the Uri for events based on Android version number
