@@ -47,7 +47,8 @@ import com.actionbarsherlock.view.MenuItem;
  *************/
 public class Settings extends SherlockActivity {
 
-    private Spinner spinCal, spinSync, spinWeekly, spinTheme, spinNotifications, spinTimezone;
+    private Spinner spinCal, spinTheme, spinNotifications, spinTimezone;
+//	private Spinner spinSync, spinWeekly;
     private Button btnStore, btnSync;
     private EditText txtStore, txtAddress, txtName;
     private TextView txtSync;
@@ -84,8 +85,8 @@ public class Settings extends SherlockActivity {
 		txtName = (EditText) findViewById(R.id.txtName);
 
         spinCal = (Spinner) findViewById(R.id.spinCals);
-        spinSync = (Spinner) findViewById(R.id.spinSync);
-        spinWeekly = (Spinner) findViewById(R.id.spinWeekly);
+//        spinSync = (Spinner) findViewById(R.id.spinSync);
+//        spinWeekly = (Spinner) findViewById(R.id.spinWeekly);
         spinTheme = (Spinner) findViewById(R.id.spinTheme);
         spinNotifications = (Spinner) findViewById(R.id.spinNotifications);
         spinTimezone = (Spinner) findViewById(R.id.spinTimezone);
@@ -102,16 +103,16 @@ public class Settings extends SherlockActivity {
          * and make it look like a dropdown box and assign our adapter to the
          * correct spinner
          *********************/
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sync, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinSync.setAdapter(adapter);
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sync, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinSync.setAdapter(adapter);
 
-        adapter = ArrayAdapter.createFromResource(this, R.array.daysOfWeek, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinWeekly.setAdapter(adapter);
+//        adapter = ArrayAdapter.createFromResource(this, R.array.daysOfWeek, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinWeekly.setAdapter(adapter);
 
 
-        adapter = ArrayAdapter.createFromResource(this, R.array.themes, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.themes, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinTheme.setAdapter(adapter);
 
@@ -133,51 +134,51 @@ public class Settings extends SherlockActivity {
         * Here we define what happens when we change the dropdown identifying
         * when we want to autosync our events
         *****************/
-        spinSync.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i == 0) {
-                    // Hide the daily choice options
-                    LinearLayout llDaily = (LinearLayout) findViewById(R.id.llDailySync);
-                    llDaily.setVisibility(View.GONE);
-                    // Hide the weekly choice options
-                    LinearLayout llWeekly = (LinearLayout) findViewById(R.id.llWeeklySync);
-                    llWeekly.setVisibility(View.GONE);
-                } else if (i == 1) {
-                    // Show the daily choice options
-                    LinearLayout llDaily = (LinearLayout) findViewById(R.id.llDailySync);
-                    llDaily.setVisibility(View.VISIBLE);
-                    // Hide the weekly choice options
-                    LinearLayout llWeekly = (LinearLayout) findViewById(R.id.llWeeklySync);
-                    llWeekly.setVisibility(View.GONE);
-                    btnSync = (Button) findViewById(R.id.btnDaily);
-                    txtSync = (TextView) findViewById(R.id.txtDailySync);
-                } else if (i == 2) {
-                    // Hide the daily choice options
-                    LinearLayout llDaily = (LinearLayout) findViewById(R.id.llDailySync);
-                    llDaily.setVisibility(View.GONE);
-                    // Show the weekly choice options
-                    LinearLayout llWeekly = (LinearLayout) findViewById(R.id.llWeeklySync);
-                    llWeekly.setVisibility(View.VISIBLE);
-                    btnSync = (Button) findViewById(R.id.btnWeekly);
-                    txtSync = (TextView) findViewById(R.id.txtWeeklySync);
-                }
-                if (i != 0) {
-                    btnSync.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            showDialog(ID_TIMEPICKER);
-                        }
-                    });
-                    showSyncTime();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                // Do nothing
-            }
-        });
+//        spinSync.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                if (i == 0) {
+//                    // Hide the daily choice options
+//                    LinearLayout llDaily = (LinearLayout) findViewById(R.id.llDailySync);
+//                    llDaily.setVisibility(View.GONE);
+//                    // Hide the weekly choice options
+//                    LinearLayout llWeekly = (LinearLayout) findViewById(R.id.llWeeklySync);
+//                    llWeekly.setVisibility(View.GONE);
+//                } else if (i == 1) {
+//                    // Show the daily choice options
+//                    LinearLayout llDaily = (LinearLayout) findViewById(R.id.llDailySync);
+//                    llDaily.setVisibility(View.VISIBLE);
+//                    // Hide the weekly choice options
+//                    LinearLayout llWeekly = (LinearLayout) findViewById(R.id.llWeeklySync);
+//                    llWeekly.setVisibility(View.GONE);
+//                    btnSync = (Button) findViewById(R.id.btnDaily);
+//                    txtSync = (TextView) findViewById(R.id.txtDailySync);
+//                } else if (i == 2) {
+//                    // Hide the daily choice options
+//                    LinearLayout llDaily = (LinearLayout) findViewById(R.id.llDailySync);
+//                    llDaily.setVisibility(View.GONE);
+//                    // Show the weekly choice options
+//                    LinearLayout llWeekly = (LinearLayout) findViewById(R.id.llWeeklySync);
+//                    llWeekly.setVisibility(View.VISIBLE);
+//                    btnSync = (Button) findViewById(R.id.btnWeekly);
+//                    txtSync = (TextView) findViewById(R.id.txtWeeklySync);
+//                }
+//                if (i != 0) {
+//                    btnSync.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            showDialog(ID_TIMEPICKER);
+//                        }
+//                    });
+//                    showSyncTime();
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//                // Do nothing
+//            }
+//        });
 
         /****************
          * This is here specifically to change the text and make
@@ -241,8 +242,8 @@ public class Settings extends SherlockActivity {
      *  AUTHOR: Devin Collins <agent14709@gmail.com>
      ************/
     private void hideSyncSpinner() {
-        LinearLayout syncLayout = (LinearLayout) findViewById(R.id.llSync);
-        syncLayout.setVisibility(View.GONE);
+//        LinearLayout syncLayout = (LinearLayout) findViewById(R.id.llSync);
+//        syncLayout.setVisibility(View.GONE);
     }
 
     /************
@@ -252,8 +253,8 @@ public class Settings extends SherlockActivity {
      *  AUTHOR: Devin Collins <agent14709@gmail.com>
      ************/
     private void showSyncSpinner() {
-        LinearLayout syncLayout = (LinearLayout) findViewById(R.id.llSync);
-        syncLayout.setVisibility(View.VISIBLE);
+//        LinearLayout syncLayout = (LinearLayout) findViewById(R.id.llSync);
+//        syncLayout.setVisibility(View.VISIBLE);
     }
 
     /************
@@ -384,19 +385,19 @@ public class Settings extends SherlockActivity {
         int tempID = pf.getCalendarID();
         int sync = pf.getTimeSpinner();
         // Change the spinner to choose if we're syncing or not
-        spinSync.setSelection(sync);
+//        spinSync.setSelection(sync);
         // Determine which type of syncing we're doing and show the proper information
-        if (sync == 1) {
-            btnSync = (Button) findViewById(R.id.btnDaily);
-            txtSync = (TextView) findViewById(R.id.txtDailySync);
-        } else if (sync == 2) {
-            int weekly = pf.getWeekSpinner();
-            btnSync = (Button) findViewById(R.id.btnWeekly);
-            txtSync = (TextView) findViewById(R.id.txtWeeklySync);
-            spinWeekly.setSelection(weekly);
-        } else {
-            spinSync.setSelection(0);
-        }
+//        if (sync == 1) {
+//            btnSync = (Button) findViewById(R.id.btnDaily);
+//            txtSync = (TextView) findViewById(R.id.txtDailySync);
+//        } else if (sync == 2) {
+//            int weekly = pf.getWeekSpinner();
+//            btnSync = (Button) findViewById(R.id.btnWeekly);
+//            txtSync = (TextView) findViewById(R.id.txtWeeklySync);
+//            spinWeekly.setSelection(weekly);
+//        } else {
+//            spinSync.setSelection(0);
+//        }
         // Get the time of day that we're syncing
         String time = pf.getSyncTime();
         // If there's a time...
@@ -616,28 +617,28 @@ public class Settings extends SherlockActivity {
                 pf.deleteWeekSpinner();
                 pf.deleteSyncTime();
             } else {
-                if (spinSync.getSelectedItemPosition() == 0) {
-                    // If the user doesn't want to sync, erase all information
-                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
-                    pf.deleteTimeSpinner();
-                    pf.deleteWeekSpinner();
-                    pf.deleteSyncTime();
-                    cancelAlarm();
-                } else if (spinSync.getSelectedItemPosition() == 1) {
-                    // If the user wants to sync daily, save that information
-                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
-                    pf.deleteWeekSpinner();
-                    pf.setTimeSpinner(1);
-                    pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
-                    setAlarm(1, hour, minute, 0);
-                } else {
-                    // If the user wants to sync weekly, save that
-                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
-                    pf.setTimeSpinner(2);
-                    pf.setWeekSpinner(spinWeekly.getSelectedItemPosition());
-                    pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
-                    setAlarm(2, hour, minute, spinWeekly.getSelectedItemPosition());
-                }
+//                if (spinSync.getSelectedItemPosition() == 0) {
+//                    // If the user doesn't want to sync, erase all information
+//                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
+//                    pf.deleteTimeSpinner();
+//                    pf.deleteWeekSpinner();
+//                    pf.deleteSyncTime();
+//                    cancelAlarm();
+//                } else if (spinSync.getSelectedItemPosition() == 1) {
+//                    // If the user wants to sync daily, save that information
+//                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
+//                    pf.deleteWeekSpinner();
+//                    pf.setTimeSpinner(1);
+//                    pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
+//                    setAlarm(1, hour, minute, 0);
+//                } else {
+//                    // If the user wants to sync weekly, save that
+//                    pf.setCalendarID(Integer.valueOf(calIds[spinCal.getSelectedItemPosition() - 1]));
+//                    pf.setTimeSpinner(2);
+//                    pf.setWeekSpinner(spinWeekly.getSelectedItemPosition());
+//                    pf.setSyncTime(String.valueOf(String.valueOf(hour) + ":" + String.valueOf(minute)));
+//                    setAlarm(2, hour, minute, spinWeekly.getSelectedItemPosition());
+//                }
             }
             pf.setNotification(spinNotifications.getSelectedItemPosition());
             pf.setTimezone(spinTimezone.getSelectedItem().toString());

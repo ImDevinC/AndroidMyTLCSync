@@ -44,61 +44,61 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
             android:id="@+id/spinCals"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
-        <LinearLayout
-            android:id="@+id/llSync"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                style="@style/SettingsText"
-                android:text="@string/choose_check_settings" />
-            <Spinner
-                android:id="@+id/spinSync"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
-            <LinearLayout
-                android:id="@+id/llDailySync"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:visibility="gone">
-                <TextView
-                    android:id="@+id/txtDailySync"
-                    style="@style/SettingsText" />
-                <Button
-                    android:id="@+id/btnDaily"
-                    android:text="@string/weekly_button"
-                    style="@style/SettingsText" />
-            </LinearLayout>
-            <LinearLayout
-                    android:id="@+id/llWeeklySync"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-                <TextView
-                    style="@style/SettingsText"
-                    android:text="@string/sync_weekly" />
-                <Spinner
-                    android:id="@+id/spinWeekly"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content" />
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:id="@+id/txtWeeklySync"
-                        style="@style/SettingsText" />
-                    <Button
-                        android:id="@+id/btnWeekly"
-                        android:text="@string/weekly_button"
-                        style="@style/SettingsText" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/llSync"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+            <!--<TextView-->
+                <!--style="@style/SettingsText"-->
+                <!--android:text="@string/choose_check_settings" />-->
+            <!--<Spinner-->
+                <!--android:id="@+id/spinSync"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content" />-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/llDailySync"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:gravity="center"-->
+                <!--android:visibility="gone">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/txtDailySync"-->
+                    <!--style="@style/SettingsText" />-->
+                <!--<Button-->
+                    <!--android:id="@+id/btnDaily"-->
+                    <!--android:text="@string/weekly_button"-->
+                    <!--style="@style/SettingsText" />-->
+            <!--</LinearLayout>-->
+            <!--<LinearLayout-->
+                    <!--android:id="@+id/llWeeklySync"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:visibility="gone">-->
+                <!--<TextView-->
+                    <!--style="@style/SettingsText"-->
+                    <!--android:text="@string/sync_weekly" />-->
+                <!--<Spinner-->
+                    <!--android:id="@+id/spinWeekly"-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content" />-->
+                <!--<LinearLayout-->
+                    <!--android:layout_width="fill_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:gravity="center">-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/txtWeeklySync"-->
+                        <!--style="@style/SettingsText" />-->
+                    <!--<Button-->
+                        <!--android:id="@+id/btnWeekly"-->
+                        <!--android:text="@string/weekly_button"-->
+                        <!--style="@style/SettingsText" />-->
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
         <LinearLayout
             android:id="@+id/llAlarmSettings"
             android:layout_width="fill_parent"

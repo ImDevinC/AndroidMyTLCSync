@@ -23,8 +23,10 @@ package com.layer8apps;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.*;
 import android.database.Cursor;
@@ -57,7 +59,7 @@ public class MyTlc extends SherlockFragmentActivity {
     private boolean logonSaved;
     private int calID = -1;
 
-	private CheckBox remember;
+//	private CheckBox remember;
 	private EditText txtUsername;
 	private EditText txtPassword;
     private TextView results;
@@ -108,21 +110,32 @@ public class MyTlc extends SherlockFragmentActivity {
         imgLogo.setImageDrawable(getResources().getDrawable(logo));
 
         try {
-            String version = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName;
-            if (Float.parseFloat(version) > pf.getVersion()) {
+            int version = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
+			Toast.makeText(this, "Version: " + version + "\nOld Version: " + pf.getVersion(), Toast.LENGTH_LONG).show();
+            if (version > pf.getVersion()) {
                 showChangeLog();
-                pf.setVersion(Float.parseFloat(version));
-                pf.deleteTimezone();
-            }
+                pf.setVersion(version);
+				/** As of August 14, 2014 we need to remove the code that allows storing employee
+				 * information on a device. So we're deleting anything that may be present */
+				pf.deleteUsername();
+				pf.deletePassword();
+				pf.deleteSyncTime();
+				pf.deleteTimeSpinner();
+				pf.deleteWeekSpinner();
+				Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
+				PendingIntent sender = PendingIntent.getBroadcast(this, 8416, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+				am.cancel(sender);
+			}
         } catch (Exception ex) {
-
+			Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
 
         txtUsername = (EditText) findViewById(R.id.txtUsername);
         txtUsername.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         txtPassword = (EditText) findViewById(R.id.txtPassword);
-        remember = (CheckBox) findViewById(R.id.remember);
+//        remember = (CheckBox) findViewById(R.id.remember);
         results = (TextView) findViewById(R.id.results);
 
         // Get a reference to our last handler
@@ -207,10 +220,10 @@ public class MyTlc extends SherlockFragmentActivity {
             // Start the Settings intent
 			startActivity(settingsInt);
 			return true;
-		} else if(item.getItemId() == R.id.deleteCreds) {
-            // Delete the users credentials
-			deleteCredentials();
-			return true;
+//		} else if(item.getItemId() == R.id.deleteCreds) {
+//            // Delete the users credentials
+//			deleteCredentials();
+//			return true;
 		} else {
 			return true;
 		}
@@ -229,13 +242,13 @@ public class MyTlc extends SherlockFragmentActivity {
         // Sets the menu to our menu layout
 		getSupportMenuInflater().inflate(R.menu.main, menu);
         // If the user has their information saved...
-		if(logonSaved)
-		{
-            // Find the ID of the deleteCredentials menu
-			MenuItem item = menu.findItem(R.id.deleteCreds);
-            // Enable the MenuItem
-			item.setEnabled(true);
-		}
+//		if(logonSaved)
+//		{
+//            // Find the ID of the deleteCredentials menu
+//			MenuItem item = menu.findItem(R.id.deleteCreds);
+//            // Enable the MenuItem
+//			item.setEnabled(true);
+//		}
         // Show the menu
 		super.onCreateOptionsMenu(menu);
 		return true;
@@ -271,7 +284,7 @@ public class MyTlc extends SherlockFragmentActivity {
         password = null;
         pf.deleteUsername();
         pf.deletePassword();
-        remember.setChecked(false);
+//        remember.setChecked(false);
         txtPassword.setText("");
         txtUsername.setText("");
 	}
@@ -304,7 +317,7 @@ public class MyTlc extends SherlockFragmentActivity {
         // Check if the user had a stored password and username
         logonSaved = (user != null && password != null);
         // Check the box if the information is saved
-        remember.setChecked(logonSaved);
+//        remember.setChecked(logonSaved);
         // Get the stored calendar ID
         int tempID = pf.getCalendarID();
         calID = -1;
@@ -337,14 +350,15 @@ public class MyTlc extends SherlockFragmentActivity {
         // Store the username and password
         username = txtUsername.getText().toString();
         password = txtPassword.getText().toString();
+		txtPassword.setText("");
         // If the user wants to store the information...
-        if (remember.isChecked()) {
-            // Try to save the credentials
-            if (!storeCredentials()) {
-                // Notify the user that the saved failed
-                Toast.makeText(this, "Error saving credentials", Toast.LENGTH_LONG).show();
-            }
-        }
+//        if (remember.isChecked()) {
+//            // Try to save the credentials
+//            if (!storeCredentials()) {
+//                // Notify the user that the saved failed
+//                Toast.makeText(this, "Error saving credentials", Toast.LENGTH_LONG).show();
+//            }
+//        }
 
         // Check the saved settings
         checkSavedSettings();

@@ -54,7 +54,7 @@ public class BootReceiver extends BroadcastReceiver {
                 int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
                 int minute = Integer.parseInt(time.substring(time.indexOf(":") + 1));
                 int week = pf.getWeekSpinner();
-                setAlarm(pf.getTimeSpinner(), hour, minute, (week > -1) ? week : 0);
+//                setAlarm(pf.getTimeSpinner(), hour, minute, (week > -1) ? week : 0);
             }
         } catch (Exception e) {
             // TODO: Error reporting?
@@ -109,7 +109,7 @@ public class BootReceiver extends BroadcastReceiver {
                 break;
         }
         // Set the alarm based on the date we set
-        am.setRepeating(AlarmManager.RTC, c.getTimeInMillis(), interval, sender);
+//        am.setRepeating(AlarmManager.RTC, c.getTimeInMillis(), interval, sender);
     }
 
 }

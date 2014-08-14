@@ -48,10 +48,10 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
             android:inputType="textPassword"
             android:singleLine="true"
             android:hint="@string/pass"/>
-        <CheckBox
-            android:id="@+id/remember"
-            style="@style/DefaultText"
-            android:text="@string/chkbx" />
+        <!--<CheckBox-->
+            <!--android:id="@+id/remember"-->
+            <!--style="@style/DefaultText"-->
+            <!--android:text="@string/chkbx" />-->
         <TextView
             android:id="@+id/results"
             style="@style/ResultText"

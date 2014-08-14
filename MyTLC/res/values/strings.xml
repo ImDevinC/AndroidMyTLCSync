@@ -61,11 +61,7 @@ along with MyTLC Sync.  If not, see <http://www.gnu.org/licenses/>. -->
     </string-array>
 
     <string-array name="changes">
-        <item>&#x2022; 1.14 - Added support for latest MyTLC upgrade</item>
-        <item>&#x2022; 1.14 - Removed excess white characters where not needed</item>
-        <item>&#x2022; 1.14.1 - Added status message from MyTLC</item>
-        <item>&#x2022; 1.14.2 - Added ability to add custom names to events</item>
-        <item>&#x2022; 1.14.2 - Duplicate shifts are no longer displayed as "new" shifts</item>
+        <item>&#x2022; 1.15 - Removed storing of credentials to improve security</item>
     </string-array>
 
     <string-array name="daysOfWeek">
